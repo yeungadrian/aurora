@@ -8,16 +8,26 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server = app.server
 
-top_markdown_text = '''
-### Dash Boilerplate
-This template is on the `boilerplate` branch of the tutorial [Github repo](https://github.com/zwrankin/dash_tutorial)  
-See the `master` branch to build an interactive visualization app
-'''
+# Define the layout of the app 
+app.layout = html.Div(children=[
+    html.H1(children='Hello Dash'),
 
-app.layout = html.Div([
+    html.Div(children='''
+        Dash: A web application framework for Python.
+    '''),
 
-    dcc.Markdown(children=top_markdown_text),
-
+    dcc.Graph(
+        id='example-graph',
+        figure={
+            'data': [
+                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+            ],
+            'layout': {
+                'title': 'Dash Data Visualization'
+            }
+        }
+    )
 ])
 
 if __name__ == '__main__':
