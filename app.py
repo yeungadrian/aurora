@@ -9,8 +9,6 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server = app.server
 
-
-
 # Define the layout of the app 
 df = pd.read_csv('https://plotly.github.io/datasets/country_indicators.csv')
 
