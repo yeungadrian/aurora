@@ -24,12 +24,6 @@ var/
 *.egg
 venv
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -48,12 +42,6 @@ coverage.xml
 *.mo
 *.pot
 
-# Django stuff:
-*.log
-
-# Sphinx documentation
-docs/_build/
-
 # PyBuilder
 target/
 
@@ -62,10 +50,6 @@ target/
 
 # API credentials
 /src/data/credentials.yaml
-
-# Some notebooks shouldn't be tracked
-/notebooks/2019_01_24_DHS_API_practice.ipynb
-/notebooks/2019_01_24_GBD_API_testing.ipynb
 
 # Database
 *.db
@@ -77,21 +61,8 @@ target/
 # VS Code
 .vscode/
 
-# Spyder
-.spyproject/
-
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 
 # exclude data from source control by default
 /data/raw
-
-# Mac OS-specific storage files
-.DS_Store
-
-# vim
-*.swp
-*.swo
-
-# Mypy cache
-.mypy_cache/
