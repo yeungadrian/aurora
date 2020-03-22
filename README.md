@@ -38,7 +38,7 @@ Deployed on Heroku
 
 ## Authors
 
-* **Adrian Yeung** - *Initial work* - [PurpleBooth](https://github.com/yeungadrian)
+* **Adrian Yeung** - [yeungadrian](https://github.com/yeungadrian)
 
 ## License
 
