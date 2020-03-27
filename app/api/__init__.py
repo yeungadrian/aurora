@@ -1,4 +1,4 @@
-""" API Blueprint Application """
+o""" API Blueprint Application """
 
 from flask import Blueprint, current_app
 from flask_restplus import Api
