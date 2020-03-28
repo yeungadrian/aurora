@@ -1,7 +1,8 @@
 import requests
 import pandas as pd
 from datetime import datetime
-from dateutil.relativedelta import *
+from dateutil.relativedelta import relativedelta
+import math
 
 json_request = {
     'allocation_weights' : [0.3,0.3,0.4],
@@ -29,13 +30,6 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
 
     with open('key.txt', 'r') as file:
         api_key = file.read()
-
-    quandl_request = (
-        'https://www.quandl.com/api/v3/datasets/NASDAQOMX/'
-        f'{code}?start_date={start_date}&end_date={end_date}&api_key={api_key}'
-        )
-
-    response = requests.get(quandl_request).json()
 
     indexdata = pd.DataFrame()
 
@@ -68,7 +62,7 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
     if (end_date.day < start_date.day):
         num_months = num_months - 1
 
-        event_count = int(round_down(num_months / month_frequency[rebalance_frequency]))
+        event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
 
     rebalance_list =[start_date.strftime("%Y-%m-%d")]
     rebalance_date = start_date
