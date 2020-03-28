@@ -7,6 +7,7 @@ import math
 json_request = {
     'allocation_weights' : [0.3,0.3,0.4],
     'codelist' : ['ABAQ','ABQI','ABQX'],
+    'benchmark': 'None',
     'initial_amount' : 10000,
     'start_date' : '2019-03-13',
     'end_date' : '2020-03-13',
@@ -24,6 +25,7 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
     start_date = json_request['start_date']
     end_date = json_request['end_date']
     codelist = json_request['codelist']
+    benchmark = json_request['benchmark']
 
     rebalance = json_request['rebalance']
     rebalance_frequency = json_request['rebalance_frequency']
@@ -33,17 +35,21 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
 
     indexdata = pd.DataFrame()
 
-    for x in range(0,len(codelist)):
+    quandl_code = codelist
+    if benchmark != 'None':
+        quandl_code = codelist + [benchmark]
+
+    for x in range(0,len(quandl_code)):
         quandl_request = (
         'https://www.quandl.com/api/v3/datasets/NASDAQOMX/'
-        f'{codelist[x]}?start_date={start_date}&end_date={end_date}&api_key={api_key}'
+        f'{quandl_code[x]}?start_date={start_date}&end_date={end_date}&api_key={api_key}'
         )
         
         response = requests.get(quandl_request).json()
         
         response_df = pd.DataFrame(response['dataset']['data'])
         response_df = response_df[[0,1]]
-        response_df.columns = ['date',codelist[x]]
+        response_df.columns = ['date',quandl_code[x]]
         
         if x == 0:
             indexdata = indexdata.append(response_df)
@@ -93,8 +99,16 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
 
     asset_projection = pd.concat(asset_projection).reset_index(drop=True)
 
+    if benchmark != 'None':
+        scaling_factor = initial_amount / indexdata.sort_values(by='date').reset_index(drop=True)['benchmark'][0]
+        asset_projection['benchmark'] = indexdata.sort_values(by='date').reset_index(drop=True)['benchmark'] * scaling_factor
+
     asset_projection['output'] = asset_projection.sum(axis = 1)
     asset_projection['date'] = indexdata['date']
 
-    return asset_projection[['date','output']].to_json(orient='index')
+    output_field = ['date','output']
 
+    if benchmark != 'None':
+        output_field = output_field +['benchmark']
+
+    return asset_projection[output_field].to_json(orient='index')
