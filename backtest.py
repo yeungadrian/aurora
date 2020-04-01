@@ -111,4 +111,4 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
     if benchmark != 'None':
         output_field = output_field +['benchmark']
 
-    return asset_projection[output_field].to_json(orient='index')
+    return asset_projection[output_field].to_json(orient='columns')
