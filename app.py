@@ -1,25 +1,19 @@
+import flask
+from flask import request, jsonify
 import requests
 import pandas as pd
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import math
+import json
 
-json_request = {
-    'allocation_weights' : [0.3,0.3,0.4],
-    'codelist' : ['ABAQ','ABQI','ABQX'],
-    'benchmark': 'None',
-    'initial_amount' : 10000,
-    'start_date' : '2019-03-13',
-    'end_date' : '2020-03-13',
-    'rebalance' : True,
-    'rebalance_frequency' : 'Monthly'
-}
-# Backtesting Portfolio
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
 
-# Define portfolio, start_date, end_date
+@app.route('/backtest/', methods=['POST'])
+def backtest():
 
-def add_income(allocation_weights, codelist, initial_amount, start_date, end_date, rebalance, rebalance_frequency):
-    json_request = request.get_json
+    json_request = request.get_json()
     allocation_weights = json_request['allocation_weights']
     initial_amount = json_request['initial_amount']
     start_date = json_request['start_date']
@@ -29,27 +23,29 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
 
     rebalance = json_request['rebalance']
     rebalance_frequency = json_request['rebalance_frequency']
-
-    with open('key.txt', 'r') as file:
-        api_key = file.read()
+    alpha_key = json_request['alpha_key']
 
     indexdata = pd.DataFrame()
 
-    quandl_code = codelist
+    alpha_code = codelist
     if benchmark != 'None':
-        quandl_code = codelist + [benchmark]
+        alpha_code = codelist + [benchmark]
 
-    for x in range(0,len(quandl_code)):
-        quandl_request = (
-        'https://www.quandl.com/api/v3/datasets/NASDAQOMX/'
-        f'{quandl_code[x]}?start_date={start_date}&end_date={end_date}&api_key={api_key}'
+    for x in range(0,len(alpha_code)):
+        alpha_request = (
+        'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='
+        f'{alpha_code[0]}&outputsize=full&apikey={alpha_key}'
         )
+        response = requests.get(alpha_request).json()
         
-        response = requests.get(quandl_request).json()
-        
-        response_df = pd.DataFrame(response['dataset']['data'])
-        response_df = response_df[[0,1]]
-        response_df.columns = ['date',quandl_code[x]]
+        response_df = pd.DataFrame(response['Time Series (Daily)']).transpose().reset_index()
+        response_df['4. close'] = pd.to_numeric(response_df['4. close'])
+        response_df = response_df[['index','4. close']]
+        response_df = response_df[response_df['index']>start_date][response_df['index']<end_date]
+        if x == len(alpha_code)-1:
+            response_df.columns = ['date','benchmark']
+        else:
+            response_df.columns = ['date',alpha_code[x]]
         
         if x == 0:
             indexdata = indexdata.append(response_df)
@@ -68,13 +64,16 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
     if (end_date.day < start_date.day):
         num_months = num_months - 1
 
-        event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
+    event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
 
     rebalance_list =[start_date.strftime("%Y-%m-%d")]
-    rebalance_date = start_date
-    for x in range(0,event_count):
-        rebalance_date = rebalance_date + relativedelta(months=+month_frequency[rebalance_frequency])
-        rebalance_list.append(rebalance_date.strftime("%Y-%m-%d"))
+    if rebalance:
+        rebalance_date = start_date
+        for x in range(0,event_count):
+            rebalance_date = rebalance_date + relativedelta(months=+month_frequency[rebalance_frequency])
+            rebalance_list.append(rebalance_date.strftime("%Y-%m-%d"))
+    else:
+        rebalance_list.append(end_date.strftime("%Y-%m-%d"))
 
     asset_projection = []
 
@@ -110,5 +109,6 @@ def add_income(allocation_weights, codelist, initial_amount, start_date, end_dat
 
     if benchmark != 'None':
         output_field = output_field +['benchmark']
+    return jsonify(json.loads(asset_projection[output_field].to_json(orient='records')))
 
-    return asset_projection[output_field].to_json(orient='columns')
+app.run()
