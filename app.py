@@ -10,6 +10,21 @@ import json
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
+def iexHistoricalPriceRequest (codeList,token):
+    indexData = pd.DataFrame()
+    codeListString = ','.join(codeList)
+    iexRequest = f'https://sandbox.iexapis.com/stable/stock/market/batch?symbols={codeListString}&types=chart&range=max&token={token}&filter=date,close'
+    iexResponse = requests.get(iexRequest).json()
+    for x in codeList:
+        singleCode = pd.DataFrame(iexResponse[x]['chart'])
+        singleCode.columns = ['date',x]
+        if x == codeList[0]:
+            indexData = indexData.append(singleCode)
+        else:
+            indexData = pd.merge(indexData,singleCode)
+    indexData = indexData.sort_values(by='date').reset_index(drop=True)
+    return(indexData)
+
 @app.route('/backtest/', methods=['POST'])
 def backtest():
 
@@ -25,33 +40,16 @@ def backtest():
     rebalance_frequency = json_request['rebalance_frequency']
     alpha_key = json_request['alpha_key']
 
-    indexdata = pd.DataFrame()
-
     alpha_code = codelist
     if benchmark != 'None':
         alpha_code = codelist + [benchmark]
 
-    for x in range(0,len(alpha_code)):
-        alpha_request = (
-        'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='
-        f'{alpha_code[0]}&outputsize=full&apikey={alpha_key}'
-        )
-        response = requests.get(alpha_request).json()
-        
-        response_df = pd.DataFrame(response['Time Series (Daily)']).transpose().reset_index()
-        response_df['4. close'] = pd.to_numeric(response_df['4. close'])
-        response_df = response_df[['index','4. close']]
-        response_df = response_df[response_df['index']>start_date][response_df['index']<end_date]
-        if x == len(alpha_code)-1:
-            response_df.columns = ['date','benchmark']
-        else:
-            response_df.columns = ['date',alpha_code[x]]
-        
-        if x == 0:
-            indexdata = indexdata.append(response_df)
-        else:
-            indexdata = pd.merge(indexdata,response_df)
-
+    indexdata = iexHistoricalPriceRequest(alpha_code,alpha_key)
+    indexdata=indexdata.rename(columns = {indexdata.columns[-1] :'benchmark'})
+    indexdata = indexdata[indexdata['date']>=start_date]
+    indexdata = indexdata[indexdata['date']<=end_date]
+    indexdata = indexdata.reset_index(drop=True)
+    
     month_frequency = {
         'Yearly': 12,
         'Quarterly': 3,
@@ -86,7 +84,6 @@ def backtest():
         index_subset = index_subset.sort_values(by='date').reset_index(drop=True)
 
         allocation = pd.DataFrame()
-
         for i in range(0,len(allocation_weights)):
             indexcode = index_subset.columns[i+1]
             scaling_factor = asset_value[i] / index_subset[indexcode][0]

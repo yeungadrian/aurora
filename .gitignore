@@ -1,5 +1,7 @@
 data
 venv
+env
 .vscode
 __pycache__
 .http
+.ipynb_checkpoints
