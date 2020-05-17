@@ -1,7 +1,6 @@
-data
-venv
-env
-.vscode
-__pycache__
-.http
-.ipynb_checkpoints
+data/
+venv/
+env/
+.vscode/
+__pycache__/
+.ipynb_checkpoints/
