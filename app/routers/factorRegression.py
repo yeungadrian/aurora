@@ -1,13 +1,22 @@
+from fastapi import APIRouter
+from pydantic import BaseModel
+
 import requests
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
 import json
-import flask
-from flask import request, jsonify
 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+router = APIRouter()
+
+class Item(BaseModel):
+    codeList : list
+    benchmark: str
+    start_date : str
+    end_date : str
+    regressionFactors: list
+    token: str
+
 
 def iexHistoricalPriceRequest (codeList,token):
     indexData = pd.DataFrame()
@@ -52,10 +61,9 @@ def result_pvalues_to_dataframe(results):
     results_df = results_df[["coeff","pvals","conf_lower","conf_higher"]]
     return results_df
 
-@app.route('/factorRegression/', methods=['POST'])
-def factorRegression():
-
-    json_request = request.get_json()
+@router.post("/")
+def factorRegression(item: Item):
+    json_request = item.dict()
     start_date = json_request['start_date']
     end_date = json_request['end_date']
     codeList = json_request['codeList']
@@ -90,6 +98,4 @@ def factorRegression():
     outputJSON = summaryJSON
     outputJSON.update(pvaluesJSON)
 
-    return jsonify(outputJSON)
-
-app.run()
+    return (outputJSON)
