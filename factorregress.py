@@ -1,5 +1,6 @@
-import flask
-from flask import request, jsonify
+from fastapi import FastAPI
+from pydantic import BaseModel
+
 import requests
 import pandas as pd
 from datetime import datetime
@@ -7,8 +8,18 @@ from dateutil.relativedelta import relativedelta
 import math
 import json
 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+class backtestItem(BaseModel):
+    allocation_weights : list
+    codelist: list
+    benchmark: str
+    initial_amount: float
+    start_date : str
+    end_date : str
+    rebalance: bool
+    rebalance_frequency: str
+    token: str
+
+app = FastAPI()
 
 def iexHistoricalPriceRequest (codeList,token):
     indexData = pd.DataFrame()
@@ -25,10 +36,9 @@ def iexHistoricalPriceRequest (codeList,token):
     indexData = indexData.sort_values(by='date').reset_index(drop=True)
     return(indexData)
 
-@app.route('/backtest/', methods=['POST'])
-def backtest():
-
-    json_request = request.get_json()
+@app.post("/backtest/")
+def backtest(item: backtestItem):
+    json_request = item.dict()
     allocation_weights = json_request['allocation_weights']
     initial_amount = json_request['initial_amount']
     start_date = json_request['start_date']
@@ -109,6 +119,4 @@ def backtest():
 
     if benchmark != 'None':
         output_field = output_field +['benchmark']
-    return jsonify(json.loads(asset_projection[output_field].to_json(orient='records')))
-
-app.run()
+    return json.loads(asset_projection[output_field].to_json(orient='records'))
