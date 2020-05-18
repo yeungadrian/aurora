@@ -60,6 +60,7 @@ def factorRegression():
     end_date = json_request['end_date']
     codeList = json_request['codeList']
     benchmark = json_request['benchmark']
+    regressionFactors= json_request['regressionFactors']
     token = json_request['token']
 
     codeList.append(benchmark)
@@ -73,7 +74,14 @@ def factorRegression():
     indexData['portfolioreturn'] = (indexData[codeList[0]] - indexData[codeList[0]].shift(1))/indexData[codeList[0]].shift(1)
     indexData['benchmarkreturn'] = (indexData.benchmark - indexData.benchmark.shift(1))/indexData.benchmark.shift(1)
 
-    model = smf.ols(formula='portfolioreturn ~ benchmarkreturn', data=indexData)
+    frenchfama = pd.read_csv('data/ff5factordaily.CSV')
+    frenchfama = frenchfama[frenchfama['date']>start_date]
+    frenchfama = frenchfama[frenchfama['date']<=end_date].reset_index(drop=True)
+    regression_data = pd.concat([indexData,frenchfama],axis = 1,join = 'inner')
+
+    regressionFactors = ' + '.join(regressionFactors)
+
+    model = smf.ols(formula=f'portfolioreturn ~ {regressionFactors}', data=regression_data)
     results = model.fit()
 
     pvaluesJSON = result_pvalues_to_dataframe(results).to_json()

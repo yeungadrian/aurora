@@ -35,20 +35,19 @@ def backtest():
     end_date = json_request['end_date']
     codelist = json_request['codelist']
     benchmark = json_request['benchmark']
-
     rebalance = json_request['rebalance']
     rebalance_frequency = json_request['rebalance_frequency']
-    alpha_key = json_request['alpha_key']
+    token = json_request['token']
 
-    alpha_code = codelist
+    iex_code = codelist
     if benchmark != 'None':
-        alpha_code = codelist + [benchmark]
+        iex_code = codelist + [benchmark]
 
-    indexdata = iexHistoricalPriceRequest(alpha_code,alpha_key)
-    indexdata=indexdata.rename(columns = {indexdata.columns[-1] :'benchmark'})
-    indexdata = indexdata[indexdata['date']>=start_date]
-    indexdata = indexdata[indexdata['date']<=end_date]
-    indexdata = indexdata.reset_index(drop=True)
+    indexData = iexHistoricalPriceRequest(iex_code,token)
+    indexData = indexData.rename(columns = {indexData.columns[-1] :'benchmark'})
+    indexData = indexData[indexData['date']>=start_date]
+    indexData = indexData[indexData['date']<=end_date]
+    indexData = indexData.reset_index(drop=True)
     
     month_frequency = {
         'Yearly': 12,
@@ -62,10 +61,9 @@ def backtest():
     if (end_date.day < start_date.day):
         num_months = num_months - 1
 
-    event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
-
     rebalance_list =[start_date.strftime("%Y-%m-%d")]
     if rebalance:
+        event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
         rebalance_date = start_date
         for x in range(0,event_count):
             rebalance_date = rebalance_date + relativedelta(months=+month_frequency[rebalance_frequency])
@@ -77,10 +75,13 @@ def backtest():
 
     asset_value = [x * initial_amount for x in allocation_weights]
 
-    for x in range(0,len(rebalance_list)-1):
+    for x in range(0,len(rebalance_list)):
         asset_value = [x * initial_amount for x in allocation_weights]
         
-        index_subset = indexdata[indexdata['date'] >= rebalance_list[0+x]][indexdata['date'] < rebalance_list[1+x]]
+        if x == len(rebalance_list)-1:
+            index_subset = indexData[indexData['date'] >= rebalance_list[x]]
+        else:
+            index_subset = indexData[indexData['date'] >= rebalance_list[x]][indexData['date'] < rebalance_list[x+1]]
         index_subset = index_subset.sort_values(by='date').reset_index(drop=True)
 
         allocation = pd.DataFrame()
@@ -92,15 +93,17 @@ def backtest():
         asset_projection.append(allocation)
         
         asset_value = allocation.iloc[len(allocation)-1].sum()
-
+    
     asset_projection = pd.concat(asset_projection).reset_index(drop=True)
+    asset_projection['output'] = asset_projection.sum(axis = 1)
+    asset_projection['date'] = indexData.sort_values(by='date').reset_index(drop=True)['date']
 
     if benchmark != 'None':
-        scaling_factor = initial_amount / indexdata.sort_values(by='date').reset_index(drop=True)['benchmark'][0]
-        asset_projection['benchmark'] = indexdata.sort_values(by='date').reset_index(drop=True)['benchmark'] * scaling_factor
+        scaling_factor = initial_amount / indexData.sort_values(by='date').reset_index(drop=True)['benchmark'][0]
+        asset_projection['benchmark'] = indexData.sort_values(by='date').reset_index(drop=True)['benchmark'] * scaling_factor
 
     asset_projection['output'] = asset_projection.sum(axis = 1)
-    asset_projection['date'] = indexdata['date']
+    asset_projection['date'] = indexData['date']
 
     output_field = ['date','output']
 
