@@ -84,15 +84,10 @@ def backtest(item: backtestItem):
 
     asset_projection = []
 
-    asset_value = [x * initial_amount for x in allocation_weights]
-
-    for x in range(0,len(rebalance_list)):
+    for x in range(0,len(rebalance_list)-1):
         asset_value = [x * initial_amount for x in allocation_weights]
         
-        if x == len(rebalance_list)-1:
-            index_subset = indexData[indexData['date'] >= rebalance_list[x]]
-        else:
-            index_subset = indexData[indexData['date'] >= rebalance_list[x]][indexData['date'] < rebalance_list[x+1]]
+        index_subset = indexData[indexData['date'] >= rebalance_list[x]][indexData['date'] <= rebalance_list[x+1]]
         index_subset = index_subset.sort_values(by='date').reset_index(drop=True)
 
         allocation = pd.DataFrame()
@@ -100,11 +95,14 @@ def backtest(item: backtestItem):
             indexcode = index_subset.columns[i+1]
             scaling_factor = asset_value[i] / index_subset[indexcode][0]
             allocation[f'allocation {i}'] = index_subset[indexcode] * scaling_factor
-        
+
+            if x != (len(rebalance_list)-1):
+                allocation = allocation.iloc[:-1, :]
+                
         asset_projection.append(allocation)
         
-        asset_value = allocation.iloc[len(allocation)-1].sum()
-    
+        initial_amount = allocation.iloc[len(allocation)-1].sum()
+       
     asset_projection = pd.concat(asset_projection).reset_index(drop=True)
     asset_projection['output'] = asset_projection.sum(axis = 1)
     asset_projection['date'] = indexData.sort_values(by='date').reset_index(drop=True)['date']
@@ -116,8 +114,60 @@ def backtest(item: backtestItem):
     asset_projection['output'] = asset_projection.sum(axis = 1)
     asset_projection['date'] = indexData['date']
 
-    output_field = ['date','output']
+    #Calculate some metrics:
+    start_end_ratio =  asset_projection['output'][len(asset_projection)-1] / asset_projection['output'][0]
+    no_years = (end_date - start_date).days / 365
+    caGrowthRate = (start_end_ratio) ** (1/no_years) - 1
+
+    asset_projection['outputreturn'] = (asset_projection['output'] - asset_projection['output'].shift(1))/asset_projection['output'].shift(1)
+    meansubtracted_values = asset_projection['outputreturn'] - asset_projection['outputreturn'].mean()
+    meansubtracted_squared_sum = (meansubtracted_values**2).sum()
+    variance = meansubtracted_squared_sum / (len(asset_projection['outputreturn'])-1)
+    stddev = variance ** (1/2)
+
+    num_years = end_date.year - start_date.year + 1
+    list_years = [start_date.year]
+    for x in range(1,num_years):
+        new_year = start_date.year + x
+        list_years.append(new_year)
+
+    annual_return_list = []
+    for y in range(0,len(list_years)):
+        CurrentYearIndex = asset_projection[asset_projection['date'].str.contains(str(list_years[y]))].reset_index(drop = True)['output']
+        annual_return = (CurrentYearIndex[len(CurrentYearIndex)-1]  - CurrentYearIndex[0]) / CurrentYearIndex[0]
+        annual_return_list.append(annual_return)
+
+    anuualreturns_df = pd.DataFrame({
+        'year':list_years,
+        'return': annual_return_list
+    })
+
+    short_asset_projection = asset_projection[['date','output']]
+    previous_max = [] 
+    for x in range(0,len(short_asset_projection)):
+        previous_max.append(max(short_asset_projection[short_asset_projection['date'] <= short_asset_projection['date'][x]]['output']))
+
+    asset_projection['previous_max'] = previous_max
+
+    asset_projection['drawdown'] = asset_projection['output'] - asset_projection['previous_max']
+    asset_projection['drawdown_pct'] = asset_projection['drawdown'] / asset_projection['previous_max']
+
+    output_field = ['date','output','drawdown_pct']
 
     if benchmark != 'None':
         output_field = output_field +['benchmark']
-    return json.loads(asset_projection[output_field].to_json(orient='records'))
+
+    json_output ={
+
+    }
+
+    json_output['backtest'] = json.loads(asset_projection[output_field].to_json(orient='records'))
+    json_output['metrics'] = {
+
+    }
+    json_output['metrics']['cagr'] = caGrowthRate
+    json_output['metrics']['stddev'] = stddev
+    json_output['metrics']['variance'] = variance
+    json_output['metrics']['annual returns'] = json.loads(anuualreturns_df.to_json(orient='records'))
+
+    return json_output
