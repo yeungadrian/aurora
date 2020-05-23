@@ -21,6 +21,7 @@ class backtestItem(BaseModel):
     rebalance: bool
     rebalance_frequency: str
     token: str
+    cache: bool = None
 
 def iexHistoricalPriceRequest (codeList,token):
     indexData = pd.DataFrame()
@@ -54,7 +55,12 @@ def backtest(item: backtestItem):
     if benchmark != 'None':
         iex_code = codelist + [benchmark]
 
-    indexData = iexHistoricalPriceRequest(iex_code,token)
+    if json_request['cache'] == True:
+        indexData = json.load(open('data/backtestCache.json', 'r'))
+        indexData = pd.DataFrame(indexData)
+    else:
+        indexData = iexHistoricalPriceRequest(iex_code,token)
+
     indexData = indexData.rename(columns = {indexData.columns[-1] :'benchmark'})
     indexData = indexData[indexData['date']>=start_date]
     indexData = indexData[indexData['date']<=end_date]

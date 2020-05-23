@@ -3,4 +3,5 @@ venv/
 env/
 .vscode/
 __pycache__/
-.ipynb_checkpoints/
+.ipynb_checkpoints
+.pytest_cache/
