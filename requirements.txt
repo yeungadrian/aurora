@@ -2,5 +2,8 @@ pandas
 numpy
 statsmodels
 requests
-flask
 jupyter
+pytest
+fastapi
+uvicorn
+
