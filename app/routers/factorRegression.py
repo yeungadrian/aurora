@@ -78,7 +78,7 @@ def factorRegression(item: Item):
         indexData = json.load(open('data/regressiondata.json', 'r'))
         indexData = pd.DataFrame(indexData)
     else:
-        indexData = iexHistoricalPriceRequest(iex_code,token)
+        indexData = iexHistoricalPriceRequest(codeList,token)
 
     indexData=indexData.rename(columns = {indexData.columns[-1] :'benchmark'})
     indexData = indexData[indexData['date']>=start_date]
