@@ -47,6 +47,6 @@ def optimizeFactor(item: optimizeItem):
 
     result = minimize(rosen, x0, method='SLSQP',
         constraints={"fun": constraint, "type": "eq"}, 
-        options={'xatol': 1e-8, 'disp': True})
+        options={'xatol': 1e-8, 'disp': False})
 
     return list(result.x)

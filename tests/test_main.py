@@ -56,3 +56,14 @@ def test_factorRegression():
             "SMB": 0.0115966893
         }
     }
+
+with open('./data/optimization.json', 'r') as file:
+    optimizeFactorInput = file.read()
+optimizeFactorInput = json.loads(optimizeFactorInput)
+
+def test_optimizeFactor():
+    response = client.post("/optimizeFactor/", json=optimizeFactorInput)
+    assert response.status_code == 200
+    assert response.json() == [-0.12857146205000275,0.6201521681595863,0.5084192938904165]
+
+
