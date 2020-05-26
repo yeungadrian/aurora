@@ -24,18 +24,18 @@ class backtestItem(BaseModel):
     cache: bool = None
 
 
-def iexHistoricalPriceRequest(codeList, token):
+def iexHistoricalPriceRequest (codeList,token):
     indexData = pd.DataFrame()
     codeListString = ','.join(codeList)
     iexRequest = f'https://sandbox.iexapis.com/stable/stock/market/batch?symbols={codeListString}&types=chart&range=max&token={token}&filter=date,close'
     iexResponse = requests.get(iexRequest).json()
     for x in codeList:
         singleCode = pd.DataFrame(iexResponse[x]['chart'])
-        singleCode.columns = ['date', x]
+        singleCode.columns = ['date',x]
         if x == codeList[0]:
             indexData = indexData.append(singleCode)
         else:
-            indexData = pd.merge(indexData, singleCode)
+            indexData = pd.merge(indexData,singleCode)
     indexData = indexData.sort_values(by='date').reset_index(drop=True)
     return(indexData)
 
@@ -74,63 +74,52 @@ def backtest(item: backtestItem):
         'Monthly': 1
     }
 
-    end_date = datetime.strptime(end_date, '%Y-%m-%d')
-    start_date = datetime.strptime(start_date, '%Y-%m-%d')
-    num_months = (end_date.year - start_date.year) * \
-        12 + (end_date.month - start_date.month)
+    end_date = datetime.strptime(end_date,'%Y-%m-%d')
+    start_date = datetime.strptime(start_date,'%Y-%m-%d')
+    num_months = (end_date.year - start_date.year) * 12 + (end_date.month - start_date.month)
     if (end_date.day < start_date.day):
         num_months = num_months - 1
 
-    rebalance_list = [start_date.strftime("%Y-%m-%d")]
+    rebalance_list =[start_date.strftime("%Y-%m-%d")]
     if rebalance:
-        event_count = int(math.floor(
-            num_months / month_frequency[rebalance_frequency]))
+        event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
         rebalance_date = start_date
-        for x in range(0, event_count):
-            rebalance_date = rebalance_date + \
-                relativedelta(months=+month_frequency[rebalance_frequency])
+        for x in range(0,event_count):
+            rebalance_date = rebalance_date + relativedelta(months=+month_frequency[rebalance_frequency])
             rebalance_list.append(rebalance_date.strftime("%Y-%m-%d"))
     else:
         rebalance_list.append(end_date.strftime("%Y-%m-%d"))
 
     asset_projection = []
 
-    for x in range(0, len(rebalance_list)-1):
-        asset_value = [x * initial_amount for x in allocation_weights]
+    initial_holding = initial_amount
 
-        index_subset = indexData[indexData['date'] >=
-                                 rebalance_list[x]][indexData['date'] <= rebalance_list[x+1]]
-        index_subset = index_subset.sort_values(
-            by='date').reset_index(drop=True)
+    for x in range(0,len(rebalance_list)-1):
+        asset_value = [x * initial_holding for x in allocation_weights]
+        
+        index_subset = indexData[indexData['date'] >= rebalance_list[x]][indexData['date'] <= rebalance_list[x+1]]
+        index_subset = index_subset.sort_values(by='date').reset_index(drop=True)
 
         allocation = pd.DataFrame()
-        for i in range(0, len(allocation_weights)):
+        for i in range(0,len(allocation_weights)):
             indexcode = index_subset.columns[i+1]
             scaling_factor = asset_value[i] / index_subset[indexcode][0]
-            allocation[f'allocation {i}'] = index_subset[indexcode] * \
-                scaling_factor
+            allocation[f'allocation {i}'] = index_subset[indexcode] * scaling_factor
 
             if x != (len(rebalance_list)-1):
                 allocation = allocation.iloc[:-1, :]
-
+                
         asset_projection.append(allocation)
-
-        initial_amount = allocation.iloc[len(allocation)-1].sum()
+        
+        initial_holding = allocation.iloc[len(allocation)-1].sum()
 
     asset_projection = pd.concat(asset_projection).reset_index(drop=True)
-    asset_projection['output'] = asset_projection.sum(axis=1)
-    asset_projection['date'] = indexData.sort_values(
-        by='date').reset_index(drop=True)['date']
+    asset_projection['output'] = asset_projection.sum(axis = 1)
+    asset_projection['date'] = indexData.sort_values(by='date').reset_index(drop=True)['date']
 
     if benchmark != 'None':
-        scaling_factor = initial_amount / \
-            indexData.sort_values(by='date').reset_index(
-                drop=True)['benchmark'][0]
-        asset_projection['benchmark'] = indexData.sort_values(
-            by='date').reset_index(drop=True)['benchmark'] * scaling_factor
-
-    asset_projection['output'] = asset_projection.sum(axis=1)
-    asset_projection['date'] = indexData['date']
+        scaling_factor = initial_amount / indexData.sort_values(by='date').reset_index(drop=True)['benchmark'][0]
+        asset_projection['benchmark'] = indexData.sort_values(by='date').reset_index(drop=True)['benchmark'] * scaling_factor
 
     # Calculate some metrics:
     start_end_ratio = asset_projection['output'][len(
