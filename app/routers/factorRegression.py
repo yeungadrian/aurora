@@ -15,7 +15,6 @@ class Item(BaseModel):
     start_date : str
     end_date : str
     regressionFactors: list
-    token: str
 
 def iexHistoricalPriceRequest (codeList,token):
     indexData = pd.DataFrame()
@@ -68,11 +67,14 @@ def factorRegression(item: Item):
     codeList = json_request['codeList']
     benchmark = json_request['benchmark']
     regressionFactors= json_request['regressionFactors']
-    token = json_request['token']
 
     codeList.append(benchmark)
 
-    indexData = iexHistoricalPriceRequest(codeList,token)
+    codes = ['date']
+    codes = codes + codeList
+
+    indexData = pd.read_csv('data/output.csv')
+    indexData = indexData[codes]
 
     indexData=indexData.rename(columns = {indexData.columns[-1] :'benchmark'})
     indexData = indexData[indexData['date']>=start_date]
