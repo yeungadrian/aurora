@@ -92,7 +92,7 @@ def factorRegression(item: Item):
     frenchfama = frenchfama[frenchfama['date']>start_date]
     frenchfama = frenchfama[frenchfama['date']<=end_date].reset_index(drop=True)
     regression_data = pd.concat([indexData,frenchfama],axis = 1,join = 'inner')
-
+    regression_data['portfolioreturn'] = regression_data['portfolioreturn'] - regression_data['RF']
     regressionFactors = ' + '.join(regressionFactors)
 
     model = smf.ols(formula=f'portfolioreturn ~ {regressionFactors}', data=regression_data)

@@ -18,8 +18,8 @@ class backtestItem(BaseModel):
     initial_amount: float
     start_date: str
     end_date: str
-    rebalance: bool
-    rebalance_frequency: str
+    rebalance: bool 
+    rebalance_frequency: str = None
     token: str
     cache: bool = None
 
@@ -50,7 +50,8 @@ def backtest(item: backtestItem):
     codelist = json_request['codelist']
     benchmark = json_request['benchmark']
     rebalance = json_request['rebalance']
-    rebalance_frequency = json_request['rebalance_frequency']
+    if rebalance:
+        rebalance_frequency = json_request['rebalance_frequency']
     token = json_request['token']
 
     iex_code = codelist
