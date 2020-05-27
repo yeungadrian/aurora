@@ -75,6 +75,7 @@ def factorRegression(item: Item):
 
     indexData = pd.read_csv('data/output.csv')
     indexData = indexData[codes]
+    indexData = indexData.sort_values(by='date').reset_index(drop=True)
 
     indexData=indexData.rename(columns = {indexData.columns[-1] :'benchmark'})
     indexData = indexData[indexData['date']>=start_date]
@@ -85,10 +86,11 @@ def factorRegression(item: Item):
     indexData['benchmarkreturn'] = (indexData.benchmark - indexData.benchmark.shift(1))/indexData.benchmark.shift(1)
 
     frenchfama = pd.read_csv('data/ff5factordaily.CSV')
-    frenchfama = frenchfama[frenchfama['date']>start_date]
+    frenchfama = frenchfama[frenchfama['date']>=start_date]
     frenchfama = frenchfama[frenchfama['date']<=end_date].reset_index(drop=True)
     regression_data = pd.concat([indexData,frenchfama],axis = 1,join = 'inner')
     regression_data['portfolioreturn'] = regression_data['portfolioreturn'] - regression_data['RF']
+    print(regression_data)
     regressionFactors = ' + '.join(regressionFactors)
 
     model = smf.ols(formula=f'portfolioreturn ~ {regressionFactors}', data=regression_data)

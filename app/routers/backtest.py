@@ -47,6 +47,8 @@ def backtest(item: backtestItem):
     rebalance = json_request['rebalance']
     if rebalance:
         rebalance_frequency = json_request['rebalance_frequency']
+
+    #Please refactor this
     codes = ['date']
     codes = codes + codelist
     if benchmark != 'None':
@@ -54,7 +56,8 @@ def backtest(item: backtestItem):
 
     indexData = pd.read_csv('data/output.csv')
     indexData = indexData[iex_code]
-
+    indexData = indexData.sort_values(by='date').reset_index(drop=True)
+    print(indexData)
     indexData = indexData.rename(columns={indexData.columns[-1]: 'benchmark'})
     indexData = indexData[indexData['date'] >= start_date]
     indexData = indexData[indexData['date'] <= end_date]

@@ -11,6 +11,7 @@ with open('./test_data/backtest.json', 'r') as file:
     backtestInput = file.read()
 backtestInput = json.loads(backtestInput)
 
+
 def test_backtest():
     response = client.post("/backtest/", json=backtestInput)
     assert response.status_code == 200
@@ -21,43 +22,51 @@ def test_backtest():
         "benchmark": 10000.0
     }
 
+
 with open('./test_data/factorRegression.json', 'r') as file:
     factorRegressionInput = file.read()
 factorRegressionInput = json.loads(factorRegressionInput)
+
 
 def test_factorRegression():
     response = client.post("/factorRegression/", json=factorRegressionInput)
     assert response.status_code == 200
     assert response.json() == {
-        "nobs": 252.0,
-        "rsquared": 0.036129374187741536,
-        "rsquared_adj": 0.028387441450293593,
-        "fvalue": 4.666712488082352,
+        "nobs": 4980.0,
+        "rsquared": 0.0004338663695606648,
+        "rsquared_adj": -0.00016876594573100867,
+        "fvalue": 0.719952047959286,
         "coeff": {
-            "Intercept": 0.0021910735,
-            "MktMinRF": -0.0035917798,
-            "SMB": 0.0049139198
+            "Intercept": -0.0052637068,
+            "MktMinRF": 0.0005944021,
+            "SMB": 0.0020169948,
+            "HML": -0.0019636165
         },
         "pvals": {
-            "Intercept": 0.25937604,
-            "MktMinRF": 0.0071851308,
-            "SMB": 0.1488124576
+            "Intercept": 3.87348e-05,
+            "MktMinRF": 0.5812138872,
+            "SMB": 0.3610547771,
+            "HML": 0.3142349127
         },
         "conf_lower": {
-            "Intercept": -0.0016263579,
-            "MktMinRF": -0.0062016696,
-            "SMB": -0.0017688497
+            "Intercept": -0.0077692088,
+            "MktMinRF": -0.0015179753,
+            "SMB": -0.0023119087,
+            "HML": -0.0057883958
         },
         "conf_higher": {
-            "Intercept": 0.0060085048,
-            "MktMinRF": -0.0009818901,
-            "SMB": 0.0115966893
+            "Intercept": -0.0027582047,
+            "MktMinRF": 0.0027067795,
+            "SMB": 0.0063458983,
+            "HML": 0.0018611628
         }
     }
+
 
 with open('./test_data/optimization.json', 'r') as file:
     optimizeFactorInput = file.read()
 optimizeFactorInput = json.loads(optimizeFactorInput)
+
 
 def test_optimizeFactor():
     response = client.post("/optimizeFactor/", json=optimizeFactorInput)

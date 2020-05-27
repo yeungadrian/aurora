@@ -1,9 +1,7 @@
 {
     "codeList" : ["AAPL"],
-    "benchmark": "VOO",
-    "start_date" : "2019-03-13",
+    "benchmark": "MMM",
+    "start_date" : "2000-03-13",
     "end_date" : "2020-03-13",
-    "regressionFactors": ["MktMinRF", "SMB"],
-    "token": "Tpk_b721ac7979b14035ac5aa6fc13b3565f",
-    "cache": true
+    "regressionFactors": ["MktMinRF", "SMB", "HML"]
 }

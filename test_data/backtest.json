@@ -1,12 +1,10 @@
 {
     "allocation_weights" : [0.5,0.5],
-    "codelist" : ["AAPL","IBM"],
-    "benchmark": "MSFT",
+    "codelist" : ["AAPL","MMM"],
+    "benchmark": "ABT",
     "initial_amount" : 10000,
     "start_date" : "2019-03-13",
     "end_date" : "2020-03-13",
     "rebalance" : true,
-    "rebalance_frequency" : "Monthly",
-    "token": "Tpk_b721ac7979b14035ac5aa6fc13b3565f",
-    "cache": true
+    "rebalance_frequency" : "Yearly"
 }
