@@ -1,0 +1,36 @@
+{
+  "optimization": {
+    "MktMinRF": 0.1,
+    "SMB": 0.01,
+    "HML": 0.5
+  },
+  "portfolio": [
+    {
+      "AAPL": {
+        "Intercept": 0.3638271882,
+        "MktMinRF": 4.172129105e-67,
+        "SMB": 0.142553189,
+        "HML": 4.07959e-05,
+        "initialweight": 0.3
+      }
+    },
+    {
+      "MSFT": {
+        "Intercept": 0.3343880965,
+        "MktMinRF": 9.161254294e-80,
+        "SMB": 3.7531e-06,
+        "HML": 0.0015788944,
+        "initialweight": 0.4
+      }
+    },
+    {
+      "NVDA": {
+        "Intercept": 0.2973589475,
+        "MktMinRF": 0.2296427553,
+        "SMB": 0.0556298108,
+        "HML": 0.9737429216,
+        "initialweight": 0.3
+      }
+    }
+  ]
+}

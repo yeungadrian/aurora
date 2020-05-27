@@ -10,7 +10,6 @@ import json
 
 router = APIRouter()
 
-
 class backtestItem(BaseModel):
     allocation_weights: list
     codelist: list
@@ -20,9 +19,6 @@ class backtestItem(BaseModel):
     end_date: str
     rebalance: bool 
     rebalance_frequency: str = None
-    token: str
-    cache: bool = None
-
 
 def iexHistoricalPriceRequest (codeList,token):
     indexData = pd.DataFrame()
@@ -39,7 +35,6 @@ def iexHistoricalPriceRequest (codeList,token):
     indexData = indexData.sort_values(by='date').reset_index(drop=True)
     return(indexData)
 
-
 @router.post("/")
 def backtest(item: backtestItem):
     json_request = item.dict()
@@ -52,17 +47,13 @@ def backtest(item: backtestItem):
     rebalance = json_request['rebalance']
     if rebalance:
         rebalance_frequency = json_request['rebalance_frequency']
-    token = json_request['token']
-
-    iex_code = codelist
+    codes = ['date']
+    codes = codes + codelist
     if benchmark != 'None':
-        iex_code = codelist + [benchmark]
+        iex_code = codes + [benchmark]
 
-    if json_request['cache'] == True:
-        indexData = json.load(open('data/backtestCache.json', 'r'))
-        indexData = pd.DataFrame(indexData)
-    else:
-        indexData = iexHistoricalPriceRequest(iex_code, token)
+    indexData = pd.read_csv('data/output.csv')
+    indexData = indexData[iex_code]
 
     indexData = indexData.rename(columns={indexData.columns[-1]: 'benchmark'})
     indexData = indexData[indexData['date'] >= start_date]

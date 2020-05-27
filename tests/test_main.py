@@ -7,10 +7,9 @@ client = TestClient(app)
 
 # python -m pytest
 
-with open('./data/backtest.json', 'r') as file:
+with open('./test_data/backtest.json', 'r') as file:
     backtestInput = file.read()
 backtestInput = json.loads(backtestInput)
-
 
 def test_backtest():
     response = client.post("/backtest/", json=backtestInput)
@@ -22,11 +21,9 @@ def test_backtest():
         "benchmark": 10000.0
     }
 
-
-with open('./data/factorRegression.json', 'r') as file:
+with open('./test_data/factorRegression.json', 'r') as file:
     factorRegressionInput = file.read()
 factorRegressionInput = json.loads(factorRegressionInput)
-
 
 def test_factorRegression():
     response = client.post("/factorRegression/", json=factorRegressionInput)
@@ -58,15 +55,12 @@ def test_factorRegression():
         }
     }
 
-
-with open('./data/optimization.json', 'r') as file:
+with open('./test_data/optimization.json', 'r') as file:
     optimizeFactorInput = file.read()
 optimizeFactorInput = json.loads(optimizeFactorInput)
-
 
 def test_optimizeFactor():
     response = client.post("/optimizeFactor/", json=optimizeFactorInput)
     assert response.status_code == 200
     assert response.json() == [-0.12857146205000275,
                                0.6201521681595863, 0.5084192938904165]
-
