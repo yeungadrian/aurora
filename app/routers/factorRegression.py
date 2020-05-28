@@ -16,21 +16,6 @@ class Item(BaseModel):
     end_date : str
     regressionFactors: list
 
-def iexHistoricalPriceRequest (codeList,token):
-    indexData = pd.DataFrame()
-    codeListString = ','.join(codeList)
-    iexRequest = f'https://sandbox.iexapis.com/stable/stock/market/batch?symbols={codeListString}&types=chart&range=max&token={token}&filter=date,close'
-    iexResponse = requests.get(iexRequest).json()
-    for x in codeList:
-        singleCode = pd.DataFrame(iexResponse[x]['chart'])
-        singleCode.columns = ['date',x]
-        if x == codeList[0]:
-            indexData = indexData.append(singleCode)
-        else:
-            indexData = pd.merge(indexData,singleCode)
-    indexData = indexData.sort_values(by='date').reset_index(drop=True)
-    return(indexData)
-
 def result_summary_to_dataframe(results):
     '''take the result of an statsmodel results table and transforms it into a dataframe'''
     #https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.RegressionResults.html link if interested in adding more results
@@ -44,10 +29,10 @@ def result_summary_to_dataframe(results):
 
 def result_pvalues_to_dataframe(results):
     '''take the result of an statsmodel results table and transforms it into a dataframe'''
-    pvals = results.pvalues
-    coeff = results.params
-    conf_lower = results.conf_int()[0]
-    conf_higher = results.conf_int()[1]
+    pvals = results.pvalues * 100
+    coeff = results.params * 100
+    conf_lower = results.conf_int()[0] * 100
+    conf_higher = results.conf_int()[1] * 100
 
     results_df = pd.DataFrame({"pvals":pvals,
                                "coeff":coeff,
@@ -81,18 +66,19 @@ def factorRegression(item: Item):
     indexData = indexData[indexData['date']>=start_date]
     indexData = indexData[indexData['date']<=end_date]
     indexData = indexData.reset_index(drop=True)
-
+    indexData['date'] =  pd.to_datetime(indexData['date'])
+    
     indexData['portfolioreturn'] = (indexData[codeList[0]] - indexData[codeList[0]].shift(1))/indexData[codeList[0]].shift(1)
     indexData['benchmarkreturn'] = (indexData.benchmark - indexData.benchmark.shift(1))/indexData.benchmark.shift(1)
 
-    frenchfama = pd.read_csv('data/ff5factordaily.CSV')
+    frenchfama = pd.read_csv('data/ff5factormonthly.CSV')
     frenchfama = frenchfama[frenchfama['date']>=start_date]
     frenchfama = frenchfama[frenchfama['date']<=end_date].reset_index(drop=True)
     regression_data = pd.concat([indexData,frenchfama],axis = 1,join = 'inner')
     regression_data['portfolioreturn'] = regression_data['portfolioreturn'] - regression_data['RF']
-    print(regression_data)
-    regressionFactors = ' + '.join(regressionFactors)
 
+    regressionFactors = ' + '.join(regressionFactors)
+    
     model = smf.ols(formula=f'portfolioreturn ~ {regressionFactors}', data=regression_data)
     results = model.fit()
 

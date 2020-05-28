@@ -32,33 +32,33 @@ def test_factorRegression():
     response = client.post("/factorRegression/", json=factorRegressionInput)
     assert response.status_code == 200
     assert response.json() == {
-        "nobs": 4980.0,
-        "rsquared": 0.0004338663695606648,
-        "rsquared_adj": -0.00016876594573100867,
-        "fvalue": 0.719952047959286,
+        "nobs": 27.0,
+        "rsquared": 0.10331289522729892,
+        "rsquared_adj": -0.013646292351749079,
+        "fvalue": 0.8833243233454736,
         "coeff": {
-            "Intercept": -0.0052637068,
-            "MktMinRF": 0.0005944021,
-            "SMB": 0.0020169948,
-            "HML": -0.0019636165
+            "Intercept": -16.4577686646,
+            "MktMinRF": -0.1752112494,
+            "SMB": 0.2212859239,
+            "HML": -0.298361303
         },
         "pvals": {
-            "Intercept": 3.87348e-05,
-            "MktMinRF": 0.5812138872,
-            "SMB": 0.3610547771,
-            "HML": 0.3142349127
+            "Intercept": 0.0,
+            "MktMinRF": 31.3859217102,
+            "SMB": 54.5978229272,
+            "HML": 24.6858435783
         },
         "conf_lower": {
-            "Intercept": -0.0077692088,
-            "MktMinRF": -0.0015179753,
-            "SMB": -0.0023119087,
-            "HML": -0.0057883958
+            "Intercept": -18.1341640453,
+            "MktMinRF": -0.5272096868,
+            "SMB": -0.525639616,
+            "HML": -0.8177846272
         },
         "conf_higher": {
-            "Intercept": -0.0027582047,
-            "MktMinRF": 0.0027067795,
-            "SMB": 0.0063458983,
-            "HML": 0.0018611628
+            "Intercept": -14.7813732838,
+            "MktMinRF": 0.176787188,
+            "SMB": 0.9682114638,
+            "HML": 0.2210620211
         }
     }
 

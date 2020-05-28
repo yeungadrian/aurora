@@ -10,6 +10,7 @@ import json
 
 router = APIRouter()
 
+
 class backtestItem(BaseModel):
     allocation_weights: list
     codelist: list
@@ -17,23 +18,9 @@ class backtestItem(BaseModel):
     initial_amount: float
     start_date: str
     end_date: str
-    rebalance: bool 
+    rebalance: bool
     rebalance_frequency: str = None
 
-def iexHistoricalPriceRequest (codeList,token):
-    indexData = pd.DataFrame()
-    codeListString = ','.join(codeList)
-    iexRequest = f'https://sandbox.iexapis.com/stable/stock/market/batch?symbols={codeListString}&types=chart&range=max&token={token}&filter=date,close'
-    iexResponse = requests.get(iexRequest).json()
-    for x in codeList:
-        singleCode = pd.DataFrame(iexResponse[x]['chart'])
-        singleCode.columns = ['date',x]
-        if x == codeList[0]:
-            indexData = indexData.append(singleCode)
-        else:
-            indexData = pd.merge(indexData,singleCode)
-    indexData = indexData.sort_values(by='date').reset_index(drop=True)
-    return(indexData)
 
 @router.post("/")
 def backtest(item: backtestItem):
@@ -48,39 +35,40 @@ def backtest(item: backtestItem):
     if rebalance:
         rebalance_frequency = json_request['rebalance_frequency']
 
-    #Please refactor this
-    codes = ['date']
-    codes = codes + codelist
-    if benchmark != 'None':
-        iex_code = codes + [benchmark]
-
-    indexData = pd.read_csv('data/output.csv')
-    indexData = indexData[iex_code]
-    indexData = indexData.sort_values(by='date').reset_index(drop=True)
-    print(indexData)
-    indexData = indexData.rename(columns={indexData.columns[-1]: 'benchmark'})
-    indexData = indexData[indexData['date'] >= start_date]
-    indexData = indexData[indexData['date'] <= end_date]
-    indexData = indexData.reset_index(drop=True)
-
     month_frequency = {
         'Yearly': 12,
         'Quarterly': 3,
         'Monthly': 1
     }
 
-    end_date = datetime.strptime(end_date,'%Y-%m-%d')
-    start_date = datetime.strptime(start_date,'%Y-%m-%d')
-    num_months = (end_date.year - start_date.year) * 12 + (end_date.month - start_date.month)
+    requestedCodes = ['date']
+    requestedCodes = requestedCodes + codelist
+    if benchmark != 'None':
+        requestedCodes = requestedCodes + [benchmark]
+
+    indexData = pd.read_csv('data/output.csv')
+    indexData = indexData[requestedCodes]
+    indexData = indexData.sort_values(by='date').reset_index(drop=True)
+
+    indexData = indexData.rename(columns={indexData.columns[-1]: 'benchmark'})
+    indexData = indexData[indexData['date'] >= start_date]
+    indexData = indexData[indexData['date'] <= end_date]
+    indexData = indexData.reset_index(drop=True)
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    num_months = (end_date.year - start_date.year) * \
+        12 + (end_date.month - start_date.month)
     if (end_date.day < start_date.day):
         num_months = num_months - 1
 
-    rebalance_list =[start_date.strftime("%Y-%m-%d")]
+    rebalance_list = [start_date.strftime("%Y-%m-%d")]
     if rebalance:
-        event_count = int(math.floor(num_months / month_frequency[rebalance_frequency]))
+        event_count = int(math.floor(
+            num_months / month_frequency[rebalance_frequency]))
         rebalance_date = start_date
-        for x in range(0,event_count):
-            rebalance_date = rebalance_date + relativedelta(months=+month_frequency[rebalance_frequency])
+        for x in range(0, event_count):
+            rebalance_date = rebalance_date + \
+                relativedelta(months=+month_frequency[rebalance_frequency])
             rebalance_list.append(rebalance_date.strftime("%Y-%m-%d"))
     else:
         rebalance_list.append(end_date.strftime("%Y-%m-%d"))
@@ -89,32 +77,39 @@ def backtest(item: backtestItem):
 
     initial_holding = initial_amount
 
-    for x in range(0,len(rebalance_list)-1):
+    for x in range(0, len(rebalance_list)-1):
         asset_value = [x * initial_holding for x in allocation_weights]
-        
-        index_subset = indexData[indexData['date'] >= rebalance_list[x]][indexData['date'] <= rebalance_list[x+1]]
-        index_subset = index_subset.sort_values(by='date').reset_index(drop=True)
+
+        index_subset = indexData[indexData['date'] >=
+                                 rebalance_list[x]][indexData['date'] <= rebalance_list[x+1]]
+        index_subset = index_subset.sort_values(
+            by='date').reset_index(drop=True)
 
         allocation = pd.DataFrame()
-        for i in range(0,len(allocation_weights)):
+        for i in range(0, len(allocation_weights)):
             indexcode = index_subset.columns[i+1]
             scaling_factor = asset_value[i] / index_subset[indexcode][0]
-            allocation[f'allocation {i}'] = index_subset[indexcode] * scaling_factor
+            allocation[f'allocation {i}'] = index_subset[indexcode] * \
+                scaling_factor
 
             if x != (len(rebalance_list)-1):
                 allocation = allocation.iloc[:-1, :]
-                
+
         asset_projection.append(allocation)
-        
+
         initial_holding = allocation.iloc[len(allocation)-1].sum()
 
     asset_projection = pd.concat(asset_projection).reset_index(drop=True)
-    asset_projection['output'] = asset_projection.sum(axis = 1)
-    asset_projection['date'] = indexData.sort_values(by='date').reset_index(drop=True)['date']
+    asset_projection['output'] = asset_projection.sum(axis=1)
+    asset_projection['date'] = indexData.sort_values(
+        by='date').reset_index(drop=True)['date']
 
     if benchmark != 'None':
-        scaling_factor = initial_amount / indexData.sort_values(by='date').reset_index(drop=True)['benchmark'][0]
-        asset_projection['benchmark'] = indexData.sort_values(by='date').reset_index(drop=True)['benchmark'] * scaling_factor
+        scaling_factor = initial_amount / \
+            indexData.sort_values(by='date').reset_index(
+                drop=True)['benchmark'][0]
+        asset_projection['benchmark'] = indexData.sort_values(
+            by='date').reset_index(drop=True)['benchmark'] * scaling_factor
 
     # Calculate some metrics:
     start_end_ratio = asset_projection['output'][len(
@@ -145,6 +140,9 @@ def backtest(item: backtestItem):
             CurrentYearIndex)-1] - CurrentYearIndex[0]) / CurrentYearIndex[0]
         annual_return_list.append(annual_return)
 
+    bestYear = max(annual_return_list)
+    worstYear = min(annual_return_list)
+
     anuualreturns_df = pd.DataFrame({
         'year': list_years,
         'return': annual_return_list
@@ -163,6 +161,8 @@ def backtest(item: backtestItem):
     asset_projection['drawdown_pct'] = asset_projection['drawdown'] / \
         asset_projection['previous_max']
 
+    maxDrawdown = min(asset_projection['drawdown_pct'])
+
     output_field = ['date', 'output', 'drawdown_pct']
 
     if benchmark != 'None':
@@ -180,6 +180,9 @@ def backtest(item: backtestItem):
     json_output['metrics']['cagr'] = caGrowthRate
     json_output['metrics']['stddev'] = stddev
     json_output['metrics']['variance'] = variance
+    json_output['metrics']['bestYear'] = bestYear
+    json_output['metrics']['worstYear'] = worstYear
+    json_output['metrics']['maxDrawdown'] = maxDrawdown
     json_output['metrics']['annual returns'] = json.loads(
         anuualreturns_df.to_json(orient='records'))
 
