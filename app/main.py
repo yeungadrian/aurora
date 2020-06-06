@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import backtest, factorRegression, optimizeFactor, stocks
+from .routers import backtest, factorRegression, optimizeFactor, stocks, assetAnalysis
 
 app = FastAPI()
 
@@ -21,4 +21,9 @@ app.include_router(
 app.include_router(
     optimizeFactor.router,
     prefix="/optimizeFactor"
+)
+
+app.include_router(
+    assetAnalysis.router,
+    prefix="/assetAnalysis"
 )

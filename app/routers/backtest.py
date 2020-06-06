@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-import requests
 import pandas as pd
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
