@@ -6,3 +6,4 @@ jupyter
 pytest
 fastapi
 uvicorn
+altair
