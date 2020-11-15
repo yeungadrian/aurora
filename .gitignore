@@ -1,10 +1,5 @@
-data/
-venv/
-env/
-.vscode/
-__pycache__/
-.ipynb_checkpoints
-.pytest_cache/
-notebooks
+# Python Virtual Environemnts
+/venv
 
-httpRequests/
+# Ide configs
+/.vscode

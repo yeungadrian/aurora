@@ -1,9 +1,2 @@
-pandas
-numpy
-statsmodels
-requests
-jupyter
-pytest
 fastapi
 uvicorn
-altair
