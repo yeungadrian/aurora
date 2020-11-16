@@ -1,2 +1,2 @@
 # aurora
-Investment application TO DO
+TO DO
