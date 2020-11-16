@@ -1,8 +1,14 @@
+# Fastapi
 fastapi
 uvicorn
 
+# Notebooks
 ipykernel
 
 pandas
+numpy
 
+# Styler
 black
+
+json
