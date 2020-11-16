@@ -1,2 +1,2 @@
 # aurora
-Prototyping for Crystal Investment application
+Investment application TO DO
