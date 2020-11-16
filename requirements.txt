@@ -1,2 +1,8 @@
 fastapi
 uvicorn
+
+ipykernel
+
+pandas
+
+black
