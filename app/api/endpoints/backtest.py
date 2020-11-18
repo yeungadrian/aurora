@@ -1,8 +1,7 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
 
 from app import schemas
-from app.api.data.data_loader import *
+from app.data.data_loader import loadHistoricalData
 
 router = APIRouter()
 

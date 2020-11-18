@@ -4,7 +4,7 @@ import json
 
 def loadHistoricalData(fund_codes, start_date, end_date):
     fund_codes.insert(0, "date")
-    all_historical_prices = pd.read_csv("app/api/data/output.csv")
+    all_historical_prices = pd.read_csv("app/data/output.csv")
     subset_data = all_historical_prices[fund_codes][
         all_historical_prices["date"] >= start_date
     ][all_historical_prices["date"] <= end_date]

@@ -12,4 +12,3 @@ scikit-learn
 # Styler
 black
 
-json
