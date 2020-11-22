@@ -1,26 +1,16 @@
 import pandas as pd
+import json
 
-def backTestModel(historical_returns, portfolio, benchmark, strategy):
+def backTestModel(historical_index, portfolio, strategy):
+    fund_list = []
+    fund_index = pd.DataFrame(historical_index)
+    for i in portfolio:
+        fund_list.append(i['fund'])
 
-
-'''
-{
-                "startDate": "2018-12-31",
-                "endDate": "2020-06-30",
-                "portfolio": [
-                    {"fund": "MMM", "amount": 1000},
-                    {"fund": "ABT", "amount": 1000},
-                ],
-                "benchmark": "AAPL",
-                "strategy": {"rebalance": True, "rebalanceFrequency": "Y"},
-            }
-
-{"portfolio":[
-    {"date": "2020-123-123",
-    "value": 123123},
-      {"date": "2020-123-123",
-    "value": 123123},
-],
-"benchmark":
-}
-'''
+        if strategy['rebalance']:
+            # something more complex
+            None
+        else:
+            fund_index[i['fund']] = fund_index[i['fund']] * i['amount']
+    fund_index['portfolio'] = fund_index[fund_list].sum(axis = 1)
+    return json.loads(fund_index[['date','portfolio']].to_json(orient = 'records'))
