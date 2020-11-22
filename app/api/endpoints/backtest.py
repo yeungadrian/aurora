@@ -18,5 +18,9 @@ def backtest(item: schemas.backtest):
         start_date=item.dict()["startDate"],
         end_date=item.dict()["endDate"],
     )
-    test = backTestModel(historical_index = historicalData, portfolio = portfolio, strategy = item.dict()["strategy"] )
+    test = backTestModel(
+        historical_index=historicalData,
+        portfolio=portfolio,
+        strategy=item.dict()["strategy"],
+    )
     return test

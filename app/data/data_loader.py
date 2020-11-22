@@ -4,7 +4,7 @@ import json
 
 def loadHistoricalIndex(fund_codes, start_date, end_date):
     response_columns = fund_codes
-    response_columns = ['date'] + fund_codes
+    response_columns = ["date"] + fund_codes
     all_historical_prices = pd.read_csv("app/data/output.csv")
     subset_data = all_historical_prices[response_columns][
         all_historical_prices["date"] >= start_date
