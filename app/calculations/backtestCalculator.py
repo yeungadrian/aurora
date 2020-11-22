@@ -1,6 +1,7 @@
 import pandas as pd
 
-def backTestModel(historical_data, portfolio, benchmark, strategy):
+def backTestModel(historical_returns, portfolio, benchmark, strategy):
+
 
 '''
 {

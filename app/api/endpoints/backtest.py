@@ -1,21 +1,20 @@
 from fastapi import APIRouter
 
 from app import schemas
-from app.data.data_loader import loadHistoricalData
+from app.data.data_loader import loadHistoricalReturns
 
 router = APIRouter()
 
 
 @router.post("/")
 def backtest(item: schemas.backtest):
-    json_request = item.dict()
-    portfolio = json_request["portfolio"]
+    portfolio = item.dict()["portfolio"]
     fund_codes = []
     for i in portfolio:
         fund_codes.append(i["fund"])
-    start_date = json_request["startDate"]
-    end_date = json_request["endDate"]
-    historicalData = loadHistoricalData(
-        fund_codes=fund_codes, start_date=start_date, end_date=end_date
+    historicalData = loadHistoricalReturns(
+        fund_codes=fund_codes,
+        start_date=item.dict()["startDate"],
+        end_date=item.dict()["endDate"],
     )
     return historicalData
