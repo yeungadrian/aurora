@@ -11,4 +11,3 @@ scikit-learn
 
 # Styler
 black
-

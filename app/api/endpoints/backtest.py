@@ -22,5 +22,7 @@ def backtest(item: schemas.backtest):
         historical_index=historicalData,
         portfolio=portfolio,
         strategy=item.dict()["strategy"],
+        start_date=item.dict()["startDate"],
+        end_date=item.dict()["endDate"],
     )
     return test
