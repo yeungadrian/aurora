@@ -38,6 +38,8 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
         end_date = datetime.strptime(end_date, "%Y-%m-%d")
         delta_months = relativedelta(end_date, start_period)
 
+        # To Do: Test edge cases of the rebalancing / dates, e.g. Leap Years, Weekends
+
         diff_months = delta_months.months
         if delta_months.days != 0:
             diff_months = diff_months + 1
@@ -47,23 +49,31 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
         temp_amount = fund_amount
         subset_list = []
         for j in range(0, diff_months):
-            end_period = start_period + relativedelta(months=frequency[rebalanceFrequency])
-            start_period = start_period.strftime('%Y-%m-%d')
-            end_period = end_period.strftime('%Y-%m-%d')
+            end_period = start_period + relativedelta(
+                months=frequency[rebalanceFrequency]
+            )
+            start_period = start_period.strftime("%Y-%m-%d")
+            end_period = end_period.strftime("%Y-%m-%d")
 
-            subset_index = fund_index[fund_index['date'] >= start_period][fund_index['date'] <= end_period]
+            subset_index = fund_index[fund_index["date"] >= start_period][
+                fund_index["date"] <= end_period
+            ]
             for k in fund_codes:
-                subset_index[k] = subset_index[k] / subset_index[k][subset_index.index[0]]
-            temp_dates = subset_index['date']
+                subset_index[k] = (
+                    subset_index[k] / subset_index[k][subset_index.index[0]]
+                )
+            temp_dates = subset_index["date"]
 
             temp_df = backtest_funds(temp_amount, fund_codes, subset_index)
-            print(temp_df)
             temp_total = temp_df.iloc[(temp_df.shape[0] - 1)].sum()
             temp_amount = [temp_total * i for i in fund_percentage]
-            temp_df['date'] = temp_dates
-    
-            start_period = datetime.strptime(temp_df['date'][temp_df.index[-1]], "%Y-%m-%d")
-            #temp_df Remove last date if not last loop
+            temp_df["date"] = temp_dates
+
+            start_period = datetime.strptime(
+                temp_df["date"][temp_df.index[-1]], "%Y-%m-%d"
+            )
+
+            temp_df.drop(temp_df.tail(1).index, inplace=True)
             subset_list.append(temp_df)
 
         result_df = pd.concat(subset_list)
