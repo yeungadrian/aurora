@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
 from app import schemas
-from app.data.data_loader import loadHistoricalIndex
-from app.calculations.backtestCalculator import backTestModel
+from app.data.dataLoader import load_historical_index
+from app.calculations.backtestCalculator import backtest_strategy
 
 router = APIRouter()
 
@@ -13,16 +13,16 @@ def backtest(item: schemas.backtest):
     fund_codes = []
     for i in portfolio:
         fund_codes.append(i["fund"])
-    historicalData = loadHistoricalIndex(
+    historicalData = load_historical_index(
         fund_codes=fund_codes,
         start_date=item.dict()["startDate"],
         end_date=item.dict()["endDate"],
     )
-    test = backTestModel(
+    result = backtest_strategy(
         historical_index=historicalData,
         portfolio=portfolio,
         strategy=item.dict()["strategy"],
         start_date=item.dict()["startDate"],
         end_date=item.dict()["endDate"],
     )
-    return test
+    return result

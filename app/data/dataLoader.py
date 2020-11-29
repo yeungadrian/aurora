@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 
-def loadHistoricalIndex(fund_codes, start_date, end_date):
+def load_historical_index(fund_codes, start_date, end_date):
     response_columns = fund_codes
     response_columns = ["date"] + fund_codes
     all_historical_prices = pd.read_csv("app/data/output.csv")
