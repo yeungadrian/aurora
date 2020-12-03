@@ -4,4 +4,6 @@
 # Ide configs
 /.vscode
 
+# Prototyping stuff
 /proto
+/notebooks

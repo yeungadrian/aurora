@@ -1,10 +1,11 @@
 import streamlit as st
 
+
 def display_home():
-    st.title('Aurora')
+    st.title("Aurora")
 
     st.markdown(
-        '''
+        """
         ### Simple financial analysis
 
         #### Github repo:
@@ -16,7 +17,5 @@ def display_home():
 
         #### Roadmap:
         - Who knows
-        '''
-        ) 
-
-
+        """
+    )
