@@ -10,7 +10,6 @@ def backtest_funds(
     fund_codes,
     fund_index,
 ):
-    dates = fund_index["date"]
     num_funds = len(fund_codes)
 
     fund_diag = np.zeros((num_funds, num_funds))
@@ -31,6 +30,8 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
     for i in portfolio:
         fund_codes.append(i["fund"])
         fund_amount.append(i["amount"])
+    
+    dates = fund_index["date"]
 
     if strategy["rebalance"]:
         fund_percentage = [i / sum(fund_amount) for i in fund_amount]
@@ -41,7 +42,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
 
         # To Do: Test edge cases of the rebalancing / dates, e.g. Leap Years, Weekends
 
-        diff_months = delta_months.months
+        diff_months = delta_months.months + delta_months.years * 12
         if delta_months.days != 0:
             diff_months = diff_months + 1
 
@@ -81,5 +82,6 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
       
     else:
         result_df = backtest_funds(fund_amount, fund_codes, fund_index)
+        result_df["date"] = dates
 
     return json.loads(result_df.to_json(orient="records"))

@@ -2,8 +2,12 @@ import requests
 
 def get_funds():
     url = 'http://api:8000/funds/'
-    Response = requests.get(url).json()
-    fundList = []
-    for x in range(0, len(Response)):
-        fundList.append(Response[x]['Code'])
-    return (fundList)
+    response = requests.get(url).json()
+
+    return (response)
+
+def backtest(json_input):
+    url_backtest = 'http://api:8000/backtest/'
+    response = requests.post(url = url_backtest, json = json_input).json()
+
+    return response

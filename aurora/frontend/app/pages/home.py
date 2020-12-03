@@ -1,5 +1,22 @@
 import streamlit as st
-from app.api.funds import get_funds
 
 def display_home():
     st.title('Aurora')
+
+    st.markdown(
+        '''
+        ### Simple financial analysis
+
+        #### Github repo:
+        https://github.com/yeungadrian/aurora
+
+        #### Supported features:
+        - Historical backtesting of portfolio
+        - Over 500 US stocks
+
+        #### Roadmap:
+        - Who knows
+        '''
+        ) 
+
+
