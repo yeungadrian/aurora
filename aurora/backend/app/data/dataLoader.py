@@ -19,3 +19,9 @@ def load_historical_index(fund_codes, start_date, end_date):
     subset_data.columns = response_columns
     
     return json.loads(subset_data.to_json(orient="records"))
+
+def load_available_funds():
+    all_funds = pq.read_table('app/data/fundCodes.parquet').to_pandas().reset_index().to_json(orient = 'records')
+    
+    return json.loads(all_funds)
+

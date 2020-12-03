@@ -18,6 +18,7 @@ def backtest_funds(
 
     result = fund_index[fund_codes].dot(fund_diag)
     result.columns = fund_codes
+    
     result["portfolio"] = result.sum(axis=1)
 
     return result
@@ -77,8 +78,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
             subset_list.append(temp_df)
 
         result_df = pd.concat(subset_list)
-        result_df["portfolio"] = result_df[fund_codes]
-
+      
     else:
         result_df = backtest_funds(fund_amount, fund_codes, fund_index)
 
