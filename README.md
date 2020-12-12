@@ -1,5 +1,5 @@
 # Aurora
-### Simple financial analysis
+### Understanding financial markets
 
 #### Supported features:
 - Historical backtesting of portfolio
@@ -13,10 +13,9 @@ Run
 ```html
 docker-compose up --force-recreate --build -d
 ```
-Go to:
-[localhost:8000/docs](Localhost:8000/docs) for interactive api docs
+[localhost:8000/docs](http//:localhost:8000/docs) for interactive api docs
 
-[localhost:8501](localhost:8501) for streamlit application
+[localhost:8501](http//:localhost:8501) for streamlit application
 
 ### Dependencies:
 - Fastapi
