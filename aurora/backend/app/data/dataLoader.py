@@ -14,6 +14,18 @@ def load_historical_index(fund_codes, start_date, end_date):
         all_historical_prices["date"] <= end_date
     ]
     subset_data = subset_data.sort_values("date").reset_index(drop=True)
+
+    idx = pd.date_range(start_date, end_date)
+
+    subset_data = subset_data.set_index("date")
+    subset_data.index.name = None
+    subset_data.index = pd.DatetimeIndex(subset_data.index)
+    subset_data = subset_data.reindex(idx, fill_value=None)
+    subset_data = subset_data.interpolate(method="index", axis=0)
+    subset_data = subset_data.reset_index(drop = False)
+    subset_data.columns = response_columns
+    subset_data['date'] = subset_data['date'].dt.strftime('%Y-%m-%d')
+
     for i in fund_codes:
         subset_data[f"{i}index"] = subset_data[i] / subset_data[i][0]
 
