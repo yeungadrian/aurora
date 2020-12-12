@@ -1,17 +1,11 @@
 # Aurora
 ### Understanding financial markets
 
-#### Supported features:
-<div class="termy">
+## Supported features:
 - Historical backtesting of portfolio
 - Over 500 US stocks
 
-#### Roadmap:
-<div class="termy">
-- Who knows
-
-### Installation:
-<div class="termy">
+## Installation:
 Run 
 ```html
 docker-compose up --force-recreate --build -d
@@ -20,8 +14,8 @@ docker-compose up --force-recreate --build -d
 
 [localhost:8501](http//:localhost:8501) for streamlit application
 
-### Dependencies:
-<div class="termy">
+
+## Dependencies:
 - Fastapi
 - Streamlit
 - Docker
