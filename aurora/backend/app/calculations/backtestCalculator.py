@@ -22,6 +22,7 @@ def backtest_funds(
 
     return result
 
+
 def backtest_strategy(historical_index, portfolio, strategy, start_date, end_date):
     fund_index = pd.DataFrame(historical_index)
     fund_codes = []
@@ -39,10 +40,14 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
 
         rebalanceFrequency = frequency[strategy["rebalanceFrequency"].lower()]
 
-        fund_index['date'] = pd.to_datetime(fund_index['date'])
+        fund_index["date"] = pd.to_datetime(fund_index["date"])
 
-        month_end_dates = fund_index[fund_index['date'].dt.is_month_end]['date'].reset_index(drop = True)
-        rebalancing_dates = month_end_dates[month_end_dates.index % rebalanceFrequency == 0].reset_index(drop=True)
+        month_end_dates = fund_index[fund_index["date"].dt.is_month_end][
+            "date"
+        ].reset_index(drop=True)
+        rebalancing_dates = month_end_dates[
+            month_end_dates.index % rebalanceFrequency == 0
+        ].reset_index(drop=True)
 
         temp_amount = fund_amount
 
@@ -52,10 +57,10 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
 
             start_period = rebalancing_dates[j]
 
-            if j == (len(rebalancing_dates)-1):
+            if j == (len(rebalancing_dates) - 1):
                 end_period = end_date
             else:
-                end_period = rebalancing_dates[j+1]
+                end_period = rebalancing_dates[j + 1]
 
             subset_index = fund_index[fund_index["date"] >= start_period][
                 fund_index["date"] <= end_period
@@ -75,11 +80,11 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
             temp_df["date"] = subset_index["date"]
 
             temp_df.drop(temp_df.tail(1).index, inplace=True)
-            
+
             subset_list.append(temp_df)
 
         result_df = pd.concat(subset_list)
-        result_df['date'] = result_df['date'].dt.strftime('%Y-%m-%d')
+        result_df["date"] = result_df["date"].dt.strftime("%Y-%m-%d")
 
     else:
         result_df = backtest_funds(fund_amount, fund_codes, fund_index)
