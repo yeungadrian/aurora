@@ -91,3 +91,8 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
         result_df["date"] = dates
 
     return json.loads(result_df.to_json(orient="records"))
+
+def calculate_metrics(projection):
+
+
+    return None
