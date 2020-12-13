@@ -10,9 +10,9 @@ Run
 ```html
 docker-compose up --force-recreate --build -d
 ```
-[localhost:8000/docs](http//:localhost:8000/docs) for interactive api docs
+[localhost:8000/docs](localhost:8000/docs) for interactive api docs
 
-[localhost:8501](http//:localhost:8501) for streamlit application
+[localhost:8501](localhost:8501) for streamlit application
 
 
 ## Dependencies:
