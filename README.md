@@ -1,10 +1,21 @@
-# aurora
-TO DO
+# Aurora
+### Understanding financial markets
 
-## Installation
+## Supported features:
+- Historical backtesting of portfolio
+- Over 500 US stocks
 
-Streamlit Front end
-Where to store files?
-Docker files
+## Installation:
+Run 
+```html
+docker-compose up --force-recreate --build -d
+```
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for interactive api docs
 
-Deployment
+[http://127.0.0.1:8501](http://127.0.0.1:8501) for streamlit application
+
+
+## Dependencies:
+- Fastapi
+- Streamlit
+- Docker
