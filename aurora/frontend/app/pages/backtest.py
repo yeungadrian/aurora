@@ -8,49 +8,52 @@ from api.funds import get_funds, backtest
 
 def display_backtest():
 
+    # Portfolio Backtesting
+
     st.title("Portfolio Backtesting")
     fund_list = pd.DataFrame(get_funds())
 
-    with st.beta_expander(label="Portfolio inputs"):
+    st.sidebar.subheader("Portfolio inputs")
 
-        date_col1, date_col2 = st.beta_columns(2)
+    start_date = st.sidebar.date_input(
+        "Start Date", value=datetime(2018, 12, 31)
+    ).strftime("%Y-%m-%d")
+    end_date = st.sidebar.date_input("End Date", value=datetime(2020, 3, 31)).strftime(
+        "%Y-%m-%d"
+    )
 
-        start_date = date_col1.date_input(
-            "Start Date", value=datetime(2018, 12, 31)
-        ).strftime("%Y-%m-%d")
-        end_date = date_col2.date_input(
-            "End Date", value=datetime(2020, 3, 31)
-        ).strftime("%Y-%m-%d")
+    rebalance_options = {"Monthly": "M", "Quarterly": "Q", "Yearly": "Y"}
 
-        rebalance_options = {"Monthly": "M", "Quarterly": "Q", "Yearly": "Y"}
-
-        rebalance = date_col1.checkbox("Rebalance portfolio")
-        if rebalance:
-            rebalance_frequency = date_col2.selectbox(
-                label="Rebalance frequency", options=list(rebalance_options.keys())
-            )
-            frequency = rebalance_options[rebalance_frequency]
-        else:
-            frequency = None
-
-        selected_funds = st.multiselect(
-            label="Fund selection", options=list(fund_list["Company"])
+    rebalance = st.sidebar.checkbox("Rebalance portfolio")
+    if rebalance:
+        rebalance_frequency = st.sidebar.selectbox(
+            label="Rebalance frequency", options=list(rebalance_options.keys())
         )
-        portfolio = []
-        amount_list = []
-        for i in range(0, len(selected_funds)):
-            amount = st.number_input(label=f" {selected_funds[i]}", key=i)
-            amount_list.append(amount)
+        frequency = rebalance_options[rebalance_frequency]
+    else:
+        frequency = None
 
-        for i in range(0, len(selected_funds)):
-            portfolio.append(
-                {
-                    "fund": fund_list[fund_list["Company"] == selected_funds[i]][
-                        "Code"
-                    ].reset_index(drop=True)[0],
-                    "amount": amount_list[i],
-                }
-            )
+    selected_funds = st.sidebar.multiselect(
+        label="Fund selection", options=list(fund_list["Company"])
+    )
+    portfolio = []
+    amount_list = {}
+    for i in range(0, len(selected_funds)):
+        amount_list[f"fund{i}"] = st.sidebar.number_input(
+            label=f"{selected_funds[i]}", key=i
+        )
+
+    for i in range(0, len(selected_funds)):
+        portfolio.append(
+            {
+                "fund": fund_list[fund_list["Company"] == selected_funds[i]][
+                    "Code"
+                ].reset_index(drop=True)[0],
+                "amount": amount_list[f"fund{i}"],
+            }
+        )
+
+    # Portfolio Historical Projection
 
     if len(portfolio):
         backtest_input = {
