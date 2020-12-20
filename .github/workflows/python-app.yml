@@ -17,6 +17,8 @@ jobs:
         python-version: 3.8
     - name: Install Pytest
       run: pip install -r aurora/backend/requirements.txt
+    - name: debug
+      run: pwd
     - name: run pytest
       run: python -m pytest aurora/backend
     - name: Upload coverage
