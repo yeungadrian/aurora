@@ -15,11 +15,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: Change directory
-      run: cd aurora/backend
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-    - name: Run pytest
-      run: pytest
+    - name: Install Pytest
+      run: pip install -r aurora/backend/requirements.txt
+    - name: run pytest
+      run: python -m pytest aurora/backend
     - name: Upload coverage
       uses: codecov/codecov-action@v1
+
