@@ -1,4 +1,4 @@
-name: Pytest
+name: Github Actions
 
 on:
   push:
@@ -20,11 +20,10 @@ jobs:
         python-version: 3.8
     - name: Install Pytest
       run: pip install -r aurora/backend/requirements.txt
-    - name: debug
-      run: ls
     - name: Run pytest 
-      run: pytest
+      run: pytest -p no:cacheprovider 
       working-directory: ${{env.working-directory}}
-    - name: Upload coverage
-      uses: codecov/codecov-action@v1
-
+    - name: Delete cache
+      run: find . -type d -name __pycache__ -exec rm -r {} \+
+    - name: Black stying
+      run: Black aurora
