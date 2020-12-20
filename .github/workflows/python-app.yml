@@ -25,5 +25,3 @@ jobs:
       working-directory: ${{env.working-directory}}
     - name: Delete cache
       run: find . -type d -name __pycache__ -exec rm -r {} \+
-    - name: Black stying
-      run: Black aurora
