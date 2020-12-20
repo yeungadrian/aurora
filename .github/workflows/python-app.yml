@@ -17,9 +17,9 @@ jobs:
         python-version: 3.8
     - name: Install Pytest
       run: pip install -r aurora/backend/requirements.txt
-    - name: Change directory
-      run: cd /aurora/backend/
-    - name: Run pytest
+    - name: debug
+      run: ls
+    - name: Run pytest aurora/backend
       run: pytest
     - name: Upload coverage
       uses: codecov/codecov-action@v1
