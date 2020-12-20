@@ -18,6 +18,12 @@ jobs:
     - name: Install Pytest
       run: pip install -r aurora/backend/requirements.txt
     - name: debug
+      run: cd aurora
+    - name: debug
+      run: ls
+    - name: debug
+      run: cd backend
+    - name: debug
       run: ls
     - name: Run pytest aurora/backend
       run: pytest
