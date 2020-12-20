@@ -1,4 +1,4 @@
-name: Test
+name: Pytest
 
 on:
   push:
@@ -17,9 +17,11 @@ jobs:
         python-version: 3.8
     - name: Install Pytest
       run: pip install -r aurora/backend/requirements.txt
-    - name: debug
+    - name: Change directory
       run: cd aurora/backend
-    - name: run pytest
+    - name: debug info
+      run: ls
+    - name: Run pytest
       run: pytest
     - name: Upload coverage
       uses: codecov/codecov-action@v1
