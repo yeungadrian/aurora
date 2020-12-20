@@ -14,7 +14,16 @@ docker-compose up --force-recreate --build -d
 
 [http://127.0.0.1:8501](http://127.0.0.1:8501) for streamlit application
 
+pytest
+```html
+pytest -p no:cacheprovider 
+```
 
+Stuff to add to github actions:
+Removing pycache folders
+find . -type d -name __pycache__ -exec rm -r {} \+
+Black styling
+black aurora
 ## Dependencies:
 - Fastapi
 - Streamlit
