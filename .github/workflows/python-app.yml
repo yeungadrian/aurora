@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  test:
+  Pytest:
     runs-on: ubuntu-latest
     
     steps:
@@ -18,11 +18,11 @@ jobs:
     - name: Install Pytest
       run: pip install -r aurora/backend/requirements.txt
     - name: debug
-      bash: cd aurora
+      run: bash cd aurora
     - name: debug
       run: ls
     - name: debug
-      bash: cd backend
+      run: bash cd backend
     - name: debug
       run: ls
     - name: Run pytest aurora/backend
