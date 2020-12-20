@@ -2,12 +2,8 @@
 fastapi
 uvicorn
 
-# Notebooks
-ipykernel
-
 pandas
-numpy
-scikit-learn
+requests
 
 # Styler
 black
