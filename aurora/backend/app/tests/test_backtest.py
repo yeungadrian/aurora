@@ -14,7 +14,6 @@ def test_fund_response_code():
             "portfolio": [
                 {"fund": "MMM", "amount": 1000},
             ],
-            "benchmark": "AAPL",
             "strategy": {"rebalance": False, "rebalanceFrequency": "Y"},
         },
     )
@@ -31,7 +30,6 @@ def test_fund_response_backtest_rebalancefalse():
                 {"fund": "MMM", "amount": 1000},
                 {"fund": "ABT", "amount": 1000},
             ],
-            "benchmark": "AAPL",
             "strategy": {"rebalance": False, "rebalanceFrequency": "Y"},
         },
     )
@@ -60,7 +58,6 @@ def test_fund_response_backtest_rebalancetrue():
                 {"fund": "MMM", "amount": 1000},
                 {"fund": "ABT", "amount": 1000},
             ],
-            "benchmark": "AAPL",
             "strategy": {"rebalance": True, "rebalanceFrequency": "Y"},
         },
     )
@@ -89,7 +86,6 @@ def test_fund_response_backtest_rebalancetrue():
                 {"fund": "MMM", "amount": 1000},
                 {"fund": "ABT", "amount": 1000},
             ],
-            "benchmark": "AAPL",
             "strategy": {"rebalance": True, "rebalanceFrequency": "M"},
         },
     )
