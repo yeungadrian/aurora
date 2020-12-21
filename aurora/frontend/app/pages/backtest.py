@@ -60,7 +60,6 @@ def display_backtest():
             "startDate": start_date,
             "endDate": end_date,
             "portfolio": portfolio,
-            "benchmark": "AAPL",
             "strategy": {"rebalance": rebalance, "rebalanceFrequency": frequency},
         }
 
