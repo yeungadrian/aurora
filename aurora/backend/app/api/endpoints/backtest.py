@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from app import schemas
 from app.data.dataLoader import load_historical_index
 from app.calculations.backtestCalculator import backtest_strategy
+from app.calculations.metricCalculator import calculate_metrics
 
 router = APIRouter()
 
@@ -18,11 +19,13 @@ def backtest(item: schemas.backtest):
         start_date=item.dict()["startDate"],
         end_date=item.dict()["endDate"],
     )
-    result = backtest_strategy(
+    backtest_result = backtest_strategy(
         historical_index=historicalData,
         portfolio=portfolio,
         strategy=item.dict()["strategy"],
         start_date=item.dict()["startDate"],
         end_date=item.dict()["endDate"],
     )
+    backtest_metrics = calculate_metrics(backtest_result)
+    result = {"projection": backtest_result, "metrics": backtest_metrics}
     return result
