@@ -66,9 +66,17 @@ def calculate_cagr(end_value, start_value, num_years):
 
 
 def calculate_std(returns):
+    if len(returns<2):
+        result = 0
+    else:
+        result = np.std(returns)
 
-    return np.std(returns)
+    return result
 
 
 def calculate_portfolio_ratio(portfolio_return, risk_free, std):
-    return (portfolio_return - risk_free) / std
+    if std == 0:
+        result = None
+    else: 
+        result = (portfolio_return - risk_free) / std
+    return result
