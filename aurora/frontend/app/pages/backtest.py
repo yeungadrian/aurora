@@ -63,7 +63,7 @@ def display_backtest():
             "strategy": {"rebalance": rebalance, "rebalanceFrequency": frequency},
         }
 
-        backtest_portfolio = pd.DataFrame(backtest(backtest_input))
+        backtest_portfolio = pd.DataFrame(backtest(backtest_input)["projection"])
         backtest_portfolio["date"] = pd.to_datetime(backtest_portfolio["date"])
 
         with st.beta_expander(label="Portfolio historical projection"):

@@ -7,3 +7,6 @@
 # Prototyping stuff
 /proto
 /notebooks
+
+#Cache
+/__pycache__

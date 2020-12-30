@@ -27,8 +27,5 @@ def backtest(item: schemas.backtest):
         end_date=item.dict()["endDate"],
     )
     backtest_metrics = calculate_metrics(backtest_result)
-    result = {
-        'projection': backtest_result,
-        'metrics': backtest_metrics
-    }
+    result = {"projection": backtest_result, "metrics": backtest_metrics}
     return result

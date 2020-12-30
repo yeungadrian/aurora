@@ -1,30 +1,42 @@
 import pandas as pd
-from datetime import datetime
 import numpy as np
+
 
 def calculate_metrics(portfolio):
     portfolio = pd.DataFrame(portfolio)
-    start_value = portfolio['portfolio'][0]
-    end_value = portfolio['portfolio'].iat[-1]
+    portfolio["date"] = pd.to_datetime(portfolio["date"])
 
-    start_date = datetime.strptime(portfolio['date'][0],'%Y-%m-%d')
-    end_date = datetime.strptime(portfolio['date'].iat[-1],'%Y-%m-%d')
+    start_value = portfolio["portfolio"][0]
+    end_value = portfolio["portfolio"].iat[-1]
 
+    start_date = portfolio["date"][0]
+    end_date = portfolio["date"].iat[-1]
     num_years = (end_date - start_date).days / 365.25
 
-    print(start_value, end_value, num_years)
+    month_end_projection = portfolio[portfolio["date"].dt.is_month_end].reset_index(
+        drop=True
+    )
+    month_end_projection["monthlyReturns"] = (
+        month_end_projection["portfolio"] / month_end_projection["portfolio"].shift(-1)
+        - 1
+    )
 
-    cagr = calculate_cagr(end_value = end_value, start_value = start_value, num_years = num_years)
+    cagr = calculate_cagr(
+        end_value=end_value, start_value=start_value, num_years=num_years
+    )
+    
+    monthly_std = calculate_std(returns=month_end_projection["monthlyReturns"])
 
-    #month_end_projection = portfolio[portfolio["date"].dt.is_month_end].reset_index(drop=True)
-    #month_end_projection['monthlyReturns'] = month_end_projection['portfolio'] / month_end_projection['portfolio'].shift(-1) - 1
-
-    result = {
-        'cagr': cagr
-    }
+    result = {"cagr": cagr, "monthly_std": monthly_std}
 
     return result
 
+
 def calculate_cagr(end_value, start_value, num_years):
 
-    return (end_value / start_value) ** (1 / num_years) - 1
+    return np.power(end_value / start_value, 1 / num_years) - 1
+
+
+def calculate_std(returns):
+
+    return np.std(returns)
