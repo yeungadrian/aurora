@@ -94,5 +94,15 @@ def display_backtest():
 
             st.write(monthly_return_chart)
 
+        with st.beta_expander(label="Daily drawdown"):
+            monthly_return_chart = (
+                alt.Chart(pd.DataFrame(backtest_portfolio))
+                .mark_line()
+                .encode(x="date", y="drawdown")
+                .properties(width=700)
+            )
+
+            st.write(monthly_return_chart)
+
 
 
