@@ -1,12 +1,17 @@
 # Aurora
-### Understanding financial markets
+### Understanding financial markets?
 
 ## Supported features:
-- Historical backtesting of portfolio
-- Over 500 US stocks
+- Historical backtesting of portfolios:
+    - Over 500 US stocks supported
+    - Rebalancing strategies
+    - Metrics such as:
+         - Compound annual growth rate
+         - Sharpe ratio
+         - Sortino ratio
 
 ## Installation:
-Run 
+Quick and easy local deployments using docker-compose, simply run:
 ```html
 docker-compose up --force-recreate --build -d
 ```
@@ -14,18 +19,27 @@ docker-compose up --force-recreate --build -d
 
 [http://127.0.0.1:8501](http://127.0.0.1:8501) for streamlit application
 
-pytest
+Automated testing of backend using pytest, run locally by 
 ```html
-pytest -p no:cacheprovider 
+cd aurora/backend
+pytest -p no:cacheprovider aurora/backend
 ```
 
-Stuff to add to github actions:
-Removing pycache folders
-find . -type d -name __pycache__ -exec rm -r {} \+
-Black styling
-black aurora
+## Continous integration
+Github Actions: https://github.com/yeungadrian/aurora/actions
 
-## Dependencies:
+## Major Dependencies:
 - Fastapi
 - Streamlit
 - Docker
+- Other dependencies in aurora/backend/requirements.txt and aurora/frontend/requirements.txt
+
+## To Do:
+- CI:
+    - Black Styling (black aurora)
+    - Remove any pycache folders (find . -type d -name __pycache__ -exec rm -r {} \+) 
+- Data:
+    - Support funds and more stocks
+- Deployments:
+  - How to deploy this to a cloud provider?
+  
