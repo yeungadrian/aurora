@@ -64,9 +64,8 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
             else:
                 end_period = rebalancing_dates[j + 1]
 
-            subset_index = fund_index[fund_index["date"] >= start_period][
-                fund_index["date"] <= end_period
-            ]
+            subset_index = fund_index[fund_index["date"] >= start_period]
+            subset_index = subset_index[subset_index["date"] <= end_period]
             for k in fund_codes:
                 subset_index[k] = (
                     subset_index[k] / subset_index[k][subset_index.index[0]]
@@ -91,6 +90,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
     else:
         result_df = backtest_funds(fund_amount, fund_codes, fund_index)
         result_df["date"] = dates
+    result_df = result_df.drop(columns=fund_codes)
 
     result_df["drawdown"] = (
         result_df["portfolio"] - calculate_historical_max(result_df)

@@ -80,19 +80,31 @@ def display_backtest():
             st.write(chartoutput)
 
         with st.beta_expander(label="Metrics"):
-            metrics_list = ["cagr", "monthly_std", "sharpe_ratio", "sortino_ratio"]
-            metrics_table = dict(
-                (k, backtest_response["metrics"][k])
-                for k in metrics_list
-                if k in backtest_response["metrics"]
+            cagr = round(backtest_response["metrics"]["cagr"], 2) * 100
+            monthly_std = round(backtest_response["metrics"]["monthly_std"], 2) * 100
+            downside_std = round(backtest_response["metrics"]["downside_std"], 2) * 100
+            sharpe_ratio = round(backtest_response["metrics"]["sharpe_ratio"], 2)
+            sortino_ratio = round(backtest_response["metrics"]["sortino_ratio"], 2)
+            max_drawdown = round(backtest_response["metrics"]["max_drawdown"], 2) * 100
+
+            st.markdown(
+                f"""
+                | Metric | Value |
+                | ------ | ----- |
+                |Compound Annual Growth Rate:| {cagr}% |
+                |Monthly Std:| {monthly_std}% |
+                |Downside Std:| {downside_std}% |
+                |Sharpe Ratio:| {sharpe_ratio} |
+                |Sortino Ratio:| {sortino_ratio} |
+                |Max Drawdown:| {max_drawdown}% |
+                """
             )
-            st.write(pd.DataFrame(metrics_table, index=[0]))
 
         with st.beta_expander(label="Monthly returns"):
             monthly_return_chart = (
-                alt.Chart(pd.DataFrame(backtest_response["metrics"]["monthly_returns"]))
+                alt.Chart(pd.DataFrame(backtest_response["metrics"]["monthlyReturns"]))
                 .mark_bar()
-                .encode(x="date", y="monthlyReturns")
+                .encode(x="date", y="monthlyReturn")
                 .properties(width=700)
             )
 

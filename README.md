@@ -9,6 +9,7 @@
          - Compound annual growth rate
          - Sharpe ratio
          - Sortino ratio
+         - Max Drawdown
 
 ## Installation:
 Quick and easy local deployments using docker-compose, simply run:
@@ -24,17 +25,17 @@ Go to:
 Automated testing of backend using pytest, run locally by 
 ```html
 cd aurora/backend
-pytest -p no:cacheprovider aurora/backend
+pytest -p no:cacheprovider 
 ```
-
-## Continous integration
-Github Actions: https://github.com/yeungadrian/aurora/actions
-
 ## Major Dependencies:
 - Fastapi
 - Streamlit
 - Docker
 - Other dependencies in aurora/backend/requirements.txt and aurora/frontend/requirements.txt
+## Continous integration
+Github Actions: https://github.com/yeungadrian/aurora/actions
+Lint: Black https://github.com/psf/black#github-actions
+Integration tests using pytest: https://fastapi.tiangolo.com/tutorial/testing/
 
 ## Architecture:
 - Goals:
@@ -45,23 +46,19 @@ Github Actions: https://github.com/yeungadrian/aurora/actions
     - Data is stored as parquet files (compressed files)
     - Avoiding databases for now as the focus is on building models
     - Standard fastapi code structure based loosely on https://fastapi.tiangolo.com/project-generation/
+    - Only integration tests: cover all endpoints, allows to see if refactoring has changed calculations accidently
 - Streamlit front end
     - Financial analysis requires visualisation, very difficult to get intuitive sense without visualisations and so command line gui's are ruled out
     - Do not want to learn javascript at the moment and so restricted to python libraries such as streamlit, dash
     - Streamlit looks to be the best to prototype something as fast as possible
+    - Not worth investing in automated tests here yet
 - Data
     - Calling api's directly is too slow, especially when doing analysis of many funds, when using free tiers anyway
         - Used alphavantage to get a data dump of around 500 stocks and tidied it up into parquet files
-## To Do:
-- Roadmap of functionality:
-    - Drawdowns to portfolio backtesting
-    - Tidy up routes of backend
-- Data:
-    - Support funds and more stocks
-    - Build makeshift ETL process to get data frequently
-- Deployments:
-  - How to deploy this to a cloud provider?
-- CI:
-    - Black Styling (black aurora)
-    - Remove any pycache folders (find . -type d -name __pycache__ -exec rm -r {} \+) 
-  
+## Roadmap of functionality:
+    - [ ] Tidy up routes of backend
+    - [ ] Add images of app to readme
+    - [ ] Factor Regression: French Fama
+    - [ ] ETL process to get up to date data
+    - [ ] Free data providers
+    - [ ] Deployment to a cloud provider

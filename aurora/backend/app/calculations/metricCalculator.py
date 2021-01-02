@@ -23,12 +23,12 @@ def calculate_metrics(portfolio):
         drop=True
     )
 
-    month_end_projection["monthlyReturns"] = (
+    month_end_projection["monthlyReturn"] = (
         month_end_projection["portfolio"].shift(1) / month_end_projection["portfolio"]
         - 1
     )
 
-    monthly_returns = month_end_projection[["date", "monthlyReturns"]].dropna(
+    monthly_returns = month_end_projection[["date", "monthlyReturn"]].dropna(
         axis="index"
     )
     monthly_returns["date"] = monthly_returns["date"].dt.strftime("%Y-%m-%d")
@@ -37,9 +37,9 @@ def calculate_metrics(portfolio):
     cagr = calculate_cagr(
         end_value=end_value, start_value=start_value, num_years=num_years
     )
-    negative_returns = month_end_projection[month_end_projection["monthlyReturns"] < 0]
-    monthly_std = calculate_std(returns=month_end_projection["monthlyReturns"])
-    negative_std = calculate_std(returns=negative_returns["monthlyReturns"])
+    negative_returns = month_end_projection[month_end_projection["monthlyReturn"] < 0]
+    monthly_std = calculate_std(returns=month_end_projection["monthlyReturn"])
+    negative_std = calculate_std(returns=negative_returns["monthlyReturn"])
 
     sharpe_ratio = calculate_portfolio_ratio(
         portfolio_return=cagr, risk_free=risk_free, std=monthly_std
@@ -52,9 +52,11 @@ def calculate_metrics(portfolio):
     result = {
         "cagr": cagr,
         "monthly_std": monthly_std,
+        "downside_std": negative_std,
         "sharpe_ratio": sharpe_ratio,
         "sortino_ratio": sortino_ratio,
-        "monthly_returns": monthly_returns,
+        "max_drawdown": min(portfolio["drawdown"]),
+        "monthlyReturns": monthly_returns,
     }
 
     return result

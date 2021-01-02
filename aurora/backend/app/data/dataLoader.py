@@ -10,9 +10,8 @@ def load_historical_index(fund_codes, start_date, end_date):
     all_historical_prices = pq.read_table(
         "app/data/dailyPrice.parquet", columns=response_columns
     ).to_pandas()
-    subset_data = all_historical_prices[all_historical_prices["date"] >= start_date][
-        all_historical_prices["date"] <= end_date
-    ]
+    subset_data = all_historical_prices[all_historical_prices["date"] >= start_date]
+    subset_data = subset_data[subset_data["date"] <= end_date]
     subset_data = subset_data.sort_values("date").reset_index(drop=True)
 
     idx = pd.date_range(start_date, end_date)

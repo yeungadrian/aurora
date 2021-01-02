@@ -34,16 +34,12 @@ def test_fund_response_backtest_rebalancefalse():
         },
     )
     assert response.json()["projection"][0] == {
-        "MMM": 1000,
-        "ABT": 1000,
         "portfolio": 2000,
         "drawdown": 0,
         "date": "2018-12-31",
     }
 
     assert response.json()["projection"][-1] == {
-        "MMM": 832.6860502,
-        "ABT": 1204.7559795,
         "portfolio": 2037.4420297,
         "drawdown": -0.083364665,
         "date": "2020-01-31",
@@ -64,16 +60,12 @@ def test_fund_response_backtest_rebalancetrue():
         },
     )
     assert response.json()["projection"][0] == {
-        "MMM": 1000,
-        "ABT": 1000,
         "portfolio": 2000,
         "drawdown": 0,
         "date": "2018-12-31",
     }
 
     assert response.json()["projection"][-1] == {
-        "MMM": 979.5458631406,
-        "ABT": 1091.5477455713,
         "portfolio": 2071.0936087119,
         "drawdown": -0.068224982,
         "date": "2020-01-30",
@@ -94,17 +86,27 @@ def test_fund_response_backtest_rebalancetrue():
         },
     )
     assert response.json()["projection"][0] == {
-        "MMM": 1000,
-        "ABT": 1000,
         "portfolio": 2000,
         "drawdown": 0,
         "date": "2018-12-31",
     }
 
     assert response.json()["projection"][-1] == {
-        "MMM": 975.6435274948,
-        "ABT": 1087.1992144438,
         "portfolio": 2062.8427419386,
         "drawdown": -0.0722154685,
         "date": "2020-01-30",
     }
+
+    assert response.json()["metrics"]["cagr"] == 0.029020825895222035
+
+    assert response.json()["metrics"]["monthly_std"] == 0.05116237684014537
+
+    assert response.json()["metrics"]["downside_std"] == 0.025292014385294763
+
+    assert response.json()["metrics"]["sharpe_ratio"] == 0.37177369524195053
+
+    assert response.json()["metrics"]["sortino_ratio"] == 0.7520486745524345
+
+    assert response.json()["metrics"]["max_drawdown"] == -0.162734895
+
+    assert response.json()["metrics"]["monthlyReturns"][0]["monthlyReturn"] == -0.0292249073
