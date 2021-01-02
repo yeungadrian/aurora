@@ -91,7 +91,9 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
     else:
         result_df = backtest_funds(fund_amount, fund_codes, fund_index)
         result_df["date"] = dates
-    
-    result_df['drawdown'] = (result_df['portfolio'] - calculate_historical_max(result_df)) / calculate_historical_max(result_df)
+
+    result_df["drawdown"] = (
+        result_df["portfolio"] - calculate_historical_max(result_df)
+    ) / calculate_historical_max(result_df)
 
     return json.loads(result_df.to_json(orient="records"))

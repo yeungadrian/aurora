@@ -78,15 +78,19 @@ def display_backtest():
             )
 
             st.write(chartoutput)
-        
+
         with st.beta_expander(label="Metrics"):
-            metrics_list = ['cagr','monthly_std','sharpe_ratio','sortino_ratio']
-            metrics_table = dict((k, backtest_response['metrics'][k]) for k in metrics_list if k in backtest_response['metrics'])
-            st.write(pd.DataFrame(metrics_table, index = [0]))
-        
+            metrics_list = ["cagr", "monthly_std", "sharpe_ratio", "sortino_ratio"]
+            metrics_table = dict(
+                (k, backtest_response["metrics"][k])
+                for k in metrics_list
+                if k in backtest_response["metrics"]
+            )
+            st.write(pd.DataFrame(metrics_table, index=[0]))
+
         with st.beta_expander(label="Monthly returns"):
             monthly_return_chart = (
-                alt.Chart(pd.DataFrame(backtest_response['metrics']['monthly_returns']))
+                alt.Chart(pd.DataFrame(backtest_response["metrics"]["monthly_returns"]))
                 .mark_bar()
                 .encode(x="date", y="monthlyReturns")
                 .properties(width=700)
@@ -103,6 +107,3 @@ def display_backtest():
             )
 
             st.write(monthly_return_chart)
-
-
-

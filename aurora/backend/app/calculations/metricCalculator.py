@@ -66,7 +66,7 @@ def calculate_cagr(end_value, start_value, num_years):
 
 
 def calculate_std(returns):
-    if len(returns)<2:
+    if len(returns) < 2:
         result = 0
     else:
         result = np.std(returns)
@@ -76,16 +76,17 @@ def calculate_std(returns):
 def calculate_portfolio_ratio(portfolio_return, risk_free, std):
     if std == 0:
         result = None
-    else: 
+    else:
         result = (portfolio_return - risk_free) / std
     return result
 
+
 def calculate_historical_max(portfolio):
     max_values = []
-    for i in range(0,len(portfolio['portfolio'])):
-        if len(max_values)==0:
-            max_values.append(portfolio['portfolio'][i])
+    for i in range(0, len(portfolio["portfolio"])):
+        if len(max_values) == 0:
+            max_values.append(portfolio["portfolio"][i])
         else:
-            max_values.append(max(portfolio['portfolio'][i], max_values[i-1]))
-    
+            max_values.append(max(portfolio["portfolio"][i], max_values[i - 1]))
+
     return max_values

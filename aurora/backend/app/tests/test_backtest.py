@@ -45,7 +45,7 @@ def test_fund_response_backtest_rebalancefalse():
         "MMM": 832.6860502,
         "ABT": 1204.7559795,
         "portfolio": 2037.4420297,
-        "drawdown": -0.083364665, 
+        "drawdown": -0.083364665,
         "date": "2020-01-31",
     }
 
@@ -67,7 +67,7 @@ def test_fund_response_backtest_rebalancetrue():
         "MMM": 1000,
         "ABT": 1000,
         "portfolio": 2000,
-        "drawdown": 0, 
+        "drawdown": 0,
         "date": "2018-12-31",
     }
 
@@ -97,7 +97,7 @@ def test_fund_response_backtest_rebalancetrue():
         "MMM": 1000,
         "ABT": 1000,
         "portfolio": 2000,
-        "drawdown": 0, 
+        "drawdown": 0,
         "date": "2018-12-31",
     }
 
@@ -105,6 +105,6 @@ def test_fund_response_backtest_rebalancetrue():
         "MMM": 975.6435274948,
         "ABT": 1087.1992144438,
         "portfolio": 2062.8427419386,
-        "drawdown": -0.0722154685, 
+        "drawdown": -0.0722154685,
         "date": "2020-01-30",
     }
