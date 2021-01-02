@@ -3,6 +3,7 @@
 
 # Ide configs
 /.vscode
+.DS_store
 
 # Prototyping stuff
 /proto
