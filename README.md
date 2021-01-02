@@ -16,6 +16,7 @@ Quick and easy local deployments using docker-compose, simply run:
 docker-compose up --force-recreate --build -d
 ```
 Go to:
+
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for interactive api docs
 
 [http://127.0.0.1:8501](http://127.0.0.1:8501) for streamlit application
