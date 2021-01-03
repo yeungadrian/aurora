@@ -11,7 +11,7 @@
          - Max drawdown
 
 ## Portfolio Backtesting
-![](images/portfolioBacktest.png)
+![](image/portfolioBacktest.png)
 
 ## Installation:
 Quick and easy local deployments using docker-compose, simply run:
