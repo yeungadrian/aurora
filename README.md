@@ -11,6 +11,9 @@
          - Sortino ratio
          - Max Drawdown
 
+## Portfolio Backtesting
+![](images/portfolioBacktest.png)
+
 ## Installation:
 Quick and easy local deployments using docker-compose, simply run:
 ```html
