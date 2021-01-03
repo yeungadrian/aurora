@@ -3,13 +3,12 @@
 
 ## Supported features:
 - Historical backtesting of portfolios:
-    - Over 500 US stocks supported
     - Rebalancing strategies
     - Metrics such as:
          - Compound annual growth rate
          - Sharpe ratio
          - Sortino ratio
-         - Max Drawdown
+         - Max drawdown
 
 ## Installation:
 Quick and easy local deployments using docker-compose, simply run:
@@ -27,11 +26,13 @@ Automated testing of backend using pytest, run locally by
 cd aurora/backend
 pytest -p no:cacheprovider 
 ```
+
 ## Major Dependencies:
 - Fastapi
 - Streamlit
 - Docker
 - Other dependencies in aurora/backend/requirements.txt and aurora/frontend/requirements.txt
+
 ## Continous integration
 Github Actions: https://github.com/yeungadrian/aurora/actions
 - Lint: Black https://github.com/psf/black#github-actions
@@ -54,7 +55,9 @@ Github Actions: https://github.com/yeungadrian/aurora/actions
     - Not worth investing in automated tests here yet
 - Data
     - Calling api's directly is too slow, especially when doing analysis of many funds, when using free tiers anyway
-        - Used alphavantage to get a data dump of around 500 stocks and tidied it up into parquet files
+    - Need to look for data sources and save as parquet files
+    - Free API's are either too slow or have limits, which will be breached just deploying the app and testing changes
+    
 ## Roadmap of functionality:
     - [ ] Tidy up routes of backend
     - [ ] Add images of app to readme
