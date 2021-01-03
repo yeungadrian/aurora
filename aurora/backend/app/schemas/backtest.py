@@ -13,8 +13,8 @@ class backtest(BaseModel):
                 "startDate": "2018-12-31",
                 "endDate": "2020-06-30",
                 "portfolio": [
-                    {"fund": "MMM", "amount": 1000},
-                    {"fund": "ABT", "amount": 1000},
+                    {"fund": "ABMD", "amount": 1000},
+                    {"fund": "ATVI", "amount": 1000},
                 ],
                 "strategy": {"rebalance": True, "rebalanceFrequency": "Y"},
             }

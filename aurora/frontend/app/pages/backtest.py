@@ -16,9 +16,9 @@ def display_backtest():
     st.sidebar.subheader("Portfolio inputs")
 
     start_date = st.sidebar.date_input(
-        "Start Date", value=datetime(2018, 12, 31)
+        "Start Date", value=datetime(2010, 12, 31)
     ).strftime("%Y-%m-%d")
-    end_date = st.sidebar.date_input("End Date", value=datetime(2020, 3, 31)).strftime(
+    end_date = st.sidebar.date_input("End Date", value=datetime(2020, 12, 31)).strftime(
         "%Y-%m-%d"
     )
 

@@ -8,7 +8,7 @@ def load_historical_index(fund_codes, start_date, end_date):
     response_columns = fund_codes
     response_columns = ["date"] + fund_codes
     all_historical_prices = pq.read_table(
-        "app/data/fundPrice.parquet", columns=response_columns
+        "app/data/fundPrices.parquet", columns=response_columns
     ).to_pandas()
     subset_data = all_historical_prices[all_historical_prices["date"] >= start_date]
     subset_data = subset_data[subset_data["date"] <= end_date]
