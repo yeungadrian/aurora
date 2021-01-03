@@ -110,5 +110,5 @@ def test_fund_response_backtest_rebalancetrue():
     assert response.json()["metrics"]["max_drawdown"] == -0.2761741096
 
     assert (
-        response.json()["metrics"]["monthlyReturns"][0]["monthlyReturn"] == -0.045104214
+        response.json()["metrics"]["monthlyReturns"][0]["monthlyReturn"] == 0.0472346979
     )

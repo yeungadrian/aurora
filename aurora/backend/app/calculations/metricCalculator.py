@@ -22,11 +22,12 @@ def calculate_metrics(portfolio):
     month_end_projection = portfolio[portfolio["date"].dt.is_month_end].reset_index(
         drop=True
     )
-
+    print(month_end_projection["portfolio"])
+    print(month_end_projection["portfolio"].shift(periods=-1))
     month_end_projection["monthlyReturn"] = (
-        month_end_projection["portfolio"].shift(1) / month_end_projection["portfolio"]
-        - 1
-    )
+        month_end_projection["portfolio"]
+        / month_end_projection["portfolio"].shift(periods=1)
+    ) - 1
 
     monthly_returns = month_end_projection[["date", "monthlyReturn"]].dropna(
         axis="index"

@@ -67,6 +67,12 @@ def display_backtest():
 
         backtest_portfolio = pd.DataFrame(backtest_response["projection"])
         backtest_portfolio["date"] = pd.to_datetime(backtest_portfolio["date"])
+        backtest_monthly_returns = pd.DataFrame(
+            backtest_response["metrics"]["monthlyReturns"]
+        )
+        backtest_monthly_returns["date"] = pd.to_datetime(
+            backtest_monthly_returns["date"]
+        )
 
         with st.beta_expander(label="Portfolio historical projection"):
 
@@ -102,7 +108,7 @@ def display_backtest():
 
         with st.beta_expander(label="Monthly returns"):
             monthly_return_chart = (
-                alt.Chart(pd.DataFrame(backtest_response["metrics"]["monthlyReturns"]))
+                alt.Chart(backtest_monthly_returns)
                 .mark_bar()
                 .encode(x="date", y="monthlyReturn")
                 .properties(width=700)
