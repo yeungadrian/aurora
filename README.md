@@ -34,8 +34,8 @@ pytest -p no:cacheprovider
 - Other dependencies in aurora/backend/requirements.txt and aurora/frontend/requirements.txt
 ## Continous integration
 Github Actions: https://github.com/yeungadrian/aurora/actions
-Lint: Black https://github.com/psf/black#github-actions
-Integration tests using pytest: https://fastapi.tiangolo.com/tutorial/testing/
+- Lint: Black https://github.com/psf/black#github-actions
+- Integration tests using pytest: https://fastapi.tiangolo.com/tutorial/testing/
 
 ## Architecture:
 - Goals:
