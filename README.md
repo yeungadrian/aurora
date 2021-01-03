@@ -62,9 +62,9 @@ Github Actions: https://github.com/yeungadrian/aurora/actions
     - Free API's are either too slow or have limits, which will be breached just deploying the app and testing changes
     
 ## Roadmap of functionality:
-    - [ ] Tidy up routes of backend
-    - [ ] Add images of app to readme
+    - [x] Add images of app to readme
     - [ ] Factor Regression: French Fama
+    - [ ] Tidy up routes of backend
     - [ ] ETL process to get up to date data
     - [ ] Free data providers
     - [ ] Deployment to a cloud provider

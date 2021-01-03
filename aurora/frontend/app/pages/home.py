@@ -13,7 +13,6 @@ def display_home():
 
         #### Supported features:
         - Historical backtesting of portfolio
-        - Over 500 US stocks
 
         #### Roadmap:
         - Who knows

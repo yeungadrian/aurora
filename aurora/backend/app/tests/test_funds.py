@@ -12,11 +12,11 @@ def test_fund_response_code():
 
 def test_fund_value():
     response = client.get("/funds")
-    assert response.json()[0]["Code"] == "MMM"
-    assert response.json()[0]["Company"] == "3M Company"
+    assert response.json()[0]["Code"] == "ABMD"
+    assert response.json()[0]["Company"] == "ABIOMED Inc"
 
 
 def test_fund_value():
     response = client.get("/funds")
-    assert response.json()[5]["Code"] == "ATVI"
-    assert response.json()[5]["Company"] == "Activision Blizzard"
+    assert response.json()[2]["Code"] == "AMD"
+    assert response.json()[2]["Company"] == "Advanced Micro Devices Inc"

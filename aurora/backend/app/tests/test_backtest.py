@@ -12,7 +12,7 @@ def test_fund_response_code():
             "startDate": "2018-12-31",
             "endDate": "2019-01-31",
             "portfolio": [
-                {"fund": "MMM", "amount": 1000},
+                {"fund": "ABMD", "amount": 1000},
             ],
             "strategy": {"rebalance": False, "rebalanceFrequency": "Y"},
         },
@@ -27,8 +27,8 @@ def test_fund_response_backtest_rebalancefalse():
             "startDate": "2018-12-31",
             "endDate": "2020-01-31",
             "portfolio": [
-                {"fund": "MMM", "amount": 1000},
-                {"fund": "ABT", "amount": 1000},
+                {"fund": "ABMD", "amount": 1000},
+                {"fund": "ATVI", "amount": 1000},
             ],
             "strategy": {"rebalance": False, "rebalanceFrequency": "Y"},
         },
@@ -40,8 +40,8 @@ def test_fund_response_backtest_rebalancefalse():
     }
 
     assert response.json()["projection"][-1] == {
-        "portfolio": 2037.4420297,
-        "drawdown": -0.083364665,
+        "portfolio": 1828.8735022,
+        "drawdown": -0.1428562454,
         "date": "2020-01-31",
     }
 
@@ -53,8 +53,8 @@ def test_fund_response_backtest_rebalancetrue():
             "startDate": "2018-12-31",
             "endDate": "2020-01-31",
             "portfolio": [
-                {"fund": "MMM", "amount": 1000},
-                {"fund": "ABT", "amount": 1000},
+                {"fund": "ABMD", "amount": 1000},
+                {"fund": "ATVI", "amount": 1000},
             ],
             "strategy": {"rebalance": True, "rebalanceFrequency": "Y"},
         },
@@ -66,8 +66,8 @@ def test_fund_response_backtest_rebalancetrue():
     }
 
     assert response.json()["projection"][-1] == {
-        "portfolio": 2071.0936087119,
-        "drawdown": -0.068224982,
+        "portfolio": 1908.8516897582,
+        "drawdown": -0.1053726229,
         "date": "2020-01-30",
     }
 
@@ -79,8 +79,8 @@ def test_fund_response_backtest_rebalancetrue():
             "startDate": "2018-12-31",
             "endDate": "2020-01-31",
             "portfolio": [
-                {"fund": "MMM", "amount": 1000},
-                {"fund": "ABT", "amount": 1000},
+                {"fund": "ABMD", "amount": 1000},
+                {"fund": "ATVI", "amount": 1000},
             ],
             "strategy": {"rebalance": True, "rebalanceFrequency": "M"},
         },
@@ -92,24 +92,23 @@ def test_fund_response_backtest_rebalancetrue():
     }
 
     assert response.json()["projection"][-1] == {
-        "portfolio": 2062.8427419386,
-        "drawdown": -0.0722154685,
+        "portfolio": 1810.4527720136,
+        "drawdown": -0.1514895456,
         "date": "2020-01-30",
     }
 
-    assert response.json()["metrics"]["cagr"] == 0.029020825895222035
+    assert response.json()["metrics"]["cagr"] == -0.08795955335306682
 
-    assert response.json()["metrics"]["monthly_std"] == 0.05116237684014537
+    assert response.json()["metrics"]["monthly_std"] == 0.06859533681645001
 
-    assert response.json()["metrics"]["downside_std"] == 0.025292014385294763
+    assert response.json()["metrics"]["downside_std"] == 0.028982315516618017
 
-    assert response.json()["metrics"]["sharpe_ratio"] == 0.37177369524195053
+    assert response.json()["metrics"]["sharpe_ratio"] == -1.4280789030191758
 
-    assert response.json()["metrics"]["sortino_ratio"] == 0.7520486745524345
+    assert response.json()["metrics"]["sortino_ratio"] == -3.379976775730645
 
-    assert response.json()["metrics"]["max_drawdown"] == -0.162734895
+    assert response.json()["metrics"]["max_drawdown"] == -0.2761741096
 
     assert (
-        response.json()["metrics"]["monthlyReturns"][0]["monthlyReturn"]
-        == -0.0292249073
+        response.json()["metrics"]["monthlyReturns"][0]["monthlyReturn"] == -0.045104214
     )
