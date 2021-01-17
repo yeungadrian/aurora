@@ -13,3 +13,6 @@ pyarrow
 
 # Testing
 pytest
+
+# Regression
+Statsmodels

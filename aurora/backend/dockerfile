@@ -1,18 +1,18 @@
-FROM python:3.7
+FROM python:3.8.7
 
-WORKDIR /usr/src/crystal
+WORKDIR /usr/src/aurora
 
 # dont write pyc files
 ENV PYTHONDONTWRITEBYTECODE 1
 # dont buffer to stdout/stderr
 ENV PYTHONUNBUFFERED 1
 
-COPY ./requirements.txt /usr/src/crystal/requirements.txt
+COPY ./requirements.txt /usr/src/aurora/requirements.txt
 
 # dependencies
 RUN set -eux \
     && pip install --upgrade pip setuptools wheel \
-    && pip install -r /usr/src/crystal/requirements.txt \
+    && pip install -r /usr/src/aurora/requirements.txt \
     && rm -rf /root/.cache/pip
 
-COPY ./ /usr/src/crystal
+COPY ./ /usr/src/aurora
