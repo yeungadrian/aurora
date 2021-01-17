@@ -13,3 +13,10 @@ def backtest(json_input):
     response = requests.post(url=url_backtest, json=json_input).json()
 
     return response
+
+
+def factorRegression(json_input):
+    url_factorRegression = "http://api:8000/factorRegression/"
+    response = requests.post(url=url_factorRegression, json=json_input).json()
+
+    return response

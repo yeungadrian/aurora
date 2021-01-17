@@ -36,4 +36,3 @@ def test_fund_response_backtest_rebalancefalse():
     assert response.json()[0]["coefficient"]["MktRF"] == 1.0345725482879307
     assert response.json()[0]["coefficient"]["SMB"] == -0.032656642689831046
     assert response.json()[0]["coefficient"]["HML"] == -0.3350762994201083
-

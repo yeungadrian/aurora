@@ -35,10 +35,7 @@ def calculatefactorRegression(
     return output
 
 
-def get_summary_results(
-    results, 
-    fund_code
-    ):
+def get_summary_results(results, fund_code):
     """take the result of an statsmodel results table and transforms it into a dataframe
     https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.RegressionResults.html"""
     pvals = results.pvalues * 100

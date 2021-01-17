@@ -34,13 +34,13 @@ def display_backtest():
         frequency = None
 
     selected_funds = st.sidebar.multiselect(
-        label="Fund selection", options=list(fund_list["Company"])
+        label="Fund selection", options=list(fund_list["Company"]), default = ["Apple Inc."]
     )
     portfolio = []
     amount_list = {}
     for i in range(0, len(selected_funds)):
         amount_list[f"fund{i}"] = st.sidebar.number_input(
-            label=f"{selected_funds[i]}", key=i
+            label=f"{selected_funds[i]}", key=i, value = 1000
         )
 
     for i in range(0, len(selected_funds)):
