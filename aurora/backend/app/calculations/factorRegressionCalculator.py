@@ -1,6 +1,7 @@
 import pandas as pd
 import statsmodels.formula.api as smf
 import json
+import numpy as np
 
 
 def calculatefactorRegression(
@@ -9,6 +10,8 @@ def calculatefactorRegression(
     historical_returns,
     frenchfama_Factors,
 ):
+
+    np.random.seed(1000)
 
     regression_equation = " + ".join(regression_factors)
 

@@ -30,9 +30,9 @@ def test_fund_response_backtest_rebalancefalse():
     )
     assert response.json()[0]["fundCode"] == "AAPL"
     assert response.json()[0]["numberObservations"] == 503
-    assert response.json()[0]["rSquared"] == 0.4783125383580531
-    assert response.json()[0]["fValue"] == 152.5037972540488
-    assert response.json()[0]["coefficient"]["Intercept"] == -0.7141998838464719
-    assert response.json()[0]["coefficient"]["MktRF"] == 1.0345725482879307
-    assert response.json()[0]["coefficient"]["SMB"] == -0.032656642689831046
-    assert response.json()[0]["coefficient"]["HML"] == -0.3350762994201083
+    assert response.json()[0]["rSquared"] == 0.4783125383580532
+    assert response.json()[0]["fValue"] == 152.50379725404886
+    assert response.json()[0]["coefficient"]["Intercept"] == -0.7141998838464716
+    assert response.json()[0]["coefficient"]["MktRF"] == 1.0345725482879313
+    assert response.json()[0]["coefficient"]["SMB"] == -0.03265664268983073
+    assert response.json()[0]["coefficient"]["HML"] == -0.335076299420108
