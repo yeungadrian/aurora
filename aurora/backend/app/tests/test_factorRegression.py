@@ -28,16 +28,12 @@ def test_fund_response_backtest_rebalancefalse():
             "regressionFactors": ["MktRF", "SMB", "HML"],
         },
     )
-    assert response.json() == [
-        {
-            "fundCode": "AAPL",
-            "numberObservations": 503,
-            "rSquared": 0.478313,
-            "rSquaredAdjusted": 0.475176,
-            "fValue": 152.503797,
-            "coefficient": [-0.7142, 1.034573, -0.032657, -0.335076],
-            "pValues": [0, 0, 74.103074, 0.014619],
-            "confidenceIntervalLower": [-0.812118, 0.929815, -0.22669, -0.5071],
-            "confidenceIntervalHigher": [-0.616282, 1.139331, 0.161377, -0.163053],
-        }
-    ]
+    assert response.json()[0]["fundCode"] == "AAPL"
+    assert response.json()[0]["numberObservations"] == 503
+    assert response.json()[0]["rSquared"] == 0.4783125383580531
+    assert response.json()[0]["fValue"] == 152.5037972540488
+    assert response.json()[0]["coefficient"]["Intercept"] == -0.7141998838464719
+    assert response.json()[0]["coefficient"]["MktRF"] == 1.0345725482879307
+    assert response.json()[0]["coefficient"]["SMB"] == -0.032656642689831046
+    assert response.json()[0]["coefficient"]["HML"] == -0.3350762994201083
+

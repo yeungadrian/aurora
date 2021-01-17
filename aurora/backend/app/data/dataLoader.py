@@ -98,7 +98,9 @@ def load_historical_returns(fund_codes, start_date, end_date):
 
 
 def load_ffFactors(regression_factors, start_date, end_date):
+
     response_columns = ["date"] + regression_factors + ["RF"]
+    
     all_historical_factors = pq.read_table(
         "app/data/ffFactors.parquet", columns=response_columns
     ).to_pandas()
