@@ -5,7 +5,7 @@ from pages.factorRegression import display_factorRegression
 
 st.sidebar.title("Aurora")
 
-appOptions = ["Home", "Portfolio backtesting","Factor regression"]
+appOptions = ["Home", "Portfolio backtesting", "Factor regression"]
 
 currentPage = st.sidebar.radio("", appOptions)
 

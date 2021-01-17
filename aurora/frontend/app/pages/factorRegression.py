@@ -23,19 +23,27 @@ def display_factorRegression():
     )
 
     selected_funds = st.sidebar.multiselect(
-        label="Fund selection", options=list(fund_list["Company"]), default = ["Apple Inc."]
+        label="Fund selection",
+        options=list(fund_list["Company"]),
+        default=["Apple Inc."],
     )
 
     regression_factors = ["MktRF", "SMB", "HML", "RMW", "CMA"]
 
     selected_factors = st.sidebar.multiselect(
-        label="Factor selection", options=regression_factors, default = ["MktRF", "SMB", "HML"])
+        label="Factor selection",
+        options=regression_factors,
+        default=["MktRF", "SMB", "HML"],
+    )
 
     selected_fund_list = []
 
     for i in range(0, len(selected_funds)):
-        selected_fund_list.append(fund_list[fund_list["Company"] == selected_funds[i]]["Code"].reset_index(drop=True)[0])
-
+        selected_fund_list.append(
+            fund_list[fund_list["Company"] == selected_funds[i]]["Code"].reset_index(
+                drop=True
+            )[0]
+        )
 
     if len(selected_funds) & len(selected_factors):
         regression_input = {
