@@ -2,9 +2,8 @@ from fastapi import APIRouter
 
 from app import schemas
 from app.data.dataLoader import load_historical_returns, load_ffFactors
+from app.calculations.factorRegressionCalculator import calculatefactorRegression
 import pandas as pd
-import statsmodels.formula.api as smf
-import json
 
 router = APIRouter()
 
@@ -17,14 +16,6 @@ def factorRegression(item: schemas.factorRegression):
     end_date = item.dict()["endDate"]
     regression_factors = item.dict()["regressionFactors"]
 
-    historical_returns = pd.DataFrame(
-        load_historical_returns(
-            fund_codes=fund_codes,
-            start_date=start_date,
-            end_date=end_date,
-        )
-    )
-
     frenchfama_Factors = pd.DataFrame(
         load_ffFactors(
             regression_factors=regression_factors,
@@ -33,27 +24,24 @@ def factorRegression(item: schemas.factorRegression):
         )
     )
 
-    regression_equation = " + ".join(regression_factors)
-
-    historical_returns = historical_returns.set_index("date")
-    historical_returns.index.name = None
-
-    frenchfama_Factors = frenchfama_Factors.set_index("date")
-    frenchfama_Factors.index.name = None
-
-    regression_data = pd.concat([historical_returns, frenchfama_Factors], axis=1, join='inner')
-
-    for i in fund_codes:
-        regression_data[i] = regression_data[i] - regression_data["RF"]
-
-    fund_code = fund_codes[0]
-
-    model = smf.ols(
-        formula=f"{fund_code} ~ {regression_equation}", data=regression_data
+    historical_returns = pd.DataFrame(
+        load_historical_returns(
+            fund_codes=fund_codes,
+            start_date=start_date,
+            end_date=end_date,
+        )
     )
 
-    results = model.fit()
+    output = []
 
-    coeff = results.params
+    for i in fund_codes:
 
-    return json.loads(pd.DataFrame({"coefficients": coeff}).to_json())
+        result = calculatefactorRegression(
+            fund_code=i,
+            regression_factors=regression_factors,
+            historical_returns=historical_returns,
+            frenchfama_Factors=frenchfama_Factors,
+        )
+        output.append(result)
+
+    return output
