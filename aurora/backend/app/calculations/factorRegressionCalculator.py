@@ -45,6 +45,8 @@ def get_summary_results(results, fund_code):
     coefficient = results.params * 100
     conf_lower = results.conf_int()[0] * 100
     conf_higher = results.conf_int()[1] * 100
+    standard_errors = results.bse
+    residuals = results.resid
     num_obs = results.nobs
     rsquared = results.rsquared
     rsquard_adj = results.rsquared_adj
@@ -57,9 +59,11 @@ def get_summary_results(results, fund_code):
         "rSquaredAdjusted": rsquard_adj,
         "fValue": fvalue,
         "coefficient": coefficient,
+        "standardErrors": standard_errors,
         "pValues": pvals,
         "confidenceIntervalLower": conf_lower,
         "confidenceIntervalHigher": conf_higher,
+        "residuals": residuals,
     }
 
     return output_result

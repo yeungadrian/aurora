@@ -16,7 +16,7 @@ def display_factorRegression():
     st.sidebar.subheader("Regression inputs")
 
     start_date = st.sidebar.date_input(
-        "Start Date", value=datetime(2010, 12, 31)
+        "Start Date", value=datetime(2017, 12, 31)
     ).strftime("%Y-%m-%d")
     end_date = st.sidebar.date_input("End Date", value=datetime(2020, 12, 31)).strftime(
         "%Y-%m-%d"
@@ -45,7 +45,10 @@ def display_factorRegression():
             )[0]
         )
 
-    if len(selected_funds) & len(selected_factors):
+    submit = st.sidebar.button(label = 'Run')
+    
+    if submit:
+
         regression_input = {
             "startDate": start_date,
             "endDate": end_date,
@@ -53,8 +56,54 @@ def display_factorRegression():
             "regressionFactors": selected_factors,
         }
 
-        st.write(regression_input)
-
         regression_response = factorRegression(regression_input)
 
-        st.write(regression_response)
+ 
+        for i in regression_response:
+
+            company = fund_list[fund_list["Code"] == i["fundCode"]]["Company"].reset_index(drop=True)[0]
+            regression_residuals = pd.DataFrame(
+                i["residuals"], index = [0]
+            ).transpose().reset_index()
+
+            metrics = ['coefficient','standardErrors','pValues','confidenceIntervalLower','confidenceIntervalHigher']
+
+            metrics_json = {j:i[j] for j in metrics if j in i}
+    
+            st.markdown(
+                f'''
+                ## {company}
+                ''')
+
+            st.table(
+                pd.DataFrame(
+                    {
+                        "observations": i["numberObservations"],
+                        "R Squared": round(i["rSquared"], 4),
+                        "Adjusted R Squared": round(i["rSquaredAdjusted"], 4),
+                    },
+                    index=[0],
+                )
+            )
+
+            dynamic_metrics = pd.DataFrame(metrics_json)
+            dynamic_metrics.columns = ['cofficient', 'standard error', 'p-value','95% lower','95% higher']
+
+            st.table(dynamic_metrics)
+
+            regression_residuals.columns = ['date','residual']
+            regression_residuals['date'] = pd.to_datetime(regression_residuals['date'] )
+            
+            residual_chart = (
+                alt.Chart(regression_residuals)
+                .mark_circle()
+                .encode(x="date", y="residual")
+                .properties(width=700)
+            )
+
+            st.write(residual_chart)
+
+            st.markdown(
+                f'''
+                ---
+                ''')
