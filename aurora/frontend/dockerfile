@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.8.7
 
 WORKDIR /usr/src/aurora
 
@@ -7,12 +7,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # dont buffer to stdout/stderr
 ENV PYTHONUNBUFFERED 1
 
-COPY ./requirements.txt /usr/src/aurora/requirements.txt
+COPY ./requirements.txt /usr/src/aurora/frontend/requirements.txt
 
 # dependencies
 RUN set -eux \
     && pip install --upgrade pip setuptools wheel \
-    && pip install -r /usr/src/aurora/requirements.txt \
+    && pip install -r /usr/src/aurora/frontend/requirements.txt \
     && rm -rf /root/.cache/pip
 
 COPY ./ /usr/src/aurora
