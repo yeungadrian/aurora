@@ -2,16 +2,20 @@
 ### Understanding financial markets?
 
 ## Supported features:
-- Historical backtesting of portfolios:
+- Backtesting portfolios
     - Rebalancing strategies
     - Metrics such as:
-         - Compound annual growth rate
+         - Annual growth rate
          - Sharpe ratio
-         - Sortino ratio
          - Max drawdown
+- Factor Analysis:
+    - French Fama factor regression
 
 ## Portfolio Backtesting
-![](image/portfolioBacktest.png)
+![](image/backtest.png)
+
+## Factor Analysis
+![](image/regression.png)
 
 ## Installation:
 Quick and easy local deployments using docker-compose, simply run:
@@ -29,13 +33,10 @@ Automated testing of backend using pytest, run locally by
 cd aurora/backend
 pytest -p no:cacheprovider 
 ```
-
 ## Major Dependencies:
 - Fastapi
 - Streamlit
 - Docker
-- Other dependencies in aurora/backend/requirements.txt and aurora/frontend/requirements.txt
-
 ## Continous integration
 Github Actions: https://github.com/yeungadrian/aurora/actions
 - Lint: Black https://github.com/psf/black#github-actions
@@ -63,8 +64,7 @@ Github Actions: https://github.com/yeungadrian/aurora/actions
     
 ## Roadmap of functionality:
     - [x] Add images of app to readme
-    - [ ] Factor Regression: French Fama
+    - [x] Factor Regression: French Fama
+    - [ ] Intuitive feedback on output of factor regression
     - [ ] Tidy up routes of backend
-    - [ ] ETL process to get up to date data
-    - [ ] Free data providers
     - [ ] Deployment to a cloud provider
