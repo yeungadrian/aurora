@@ -1,15 +1,5 @@
 # Aurora
-### Understanding financial markets?
-
-## Supported features:
-- Backtesting portfolios
-    - Rebalancing strategies
-    - Metrics such as:
-         - Annual growth rate
-         - Sharpe ratio
-         - Max drawdown
-- Factor Analysis:
-    - French Fama factor regression
+## Understanding financial markets?
 
 ## Portfolio Backtesting
 ![](image/backtest.png)
@@ -17,28 +7,39 @@
 ## Factor Analysis
 ![](image/regression.png)
 
+## Supported features:
+- Backtesting portfolios
+    - Rebalancing strategies
+    - Annual growth rate
+    - Sharpe ratio
+    - Max drawdown
+- Factor Analysis:
+    - French Fama factor model
+
 ## Installation:
 Quick and easy local deployments using docker-compose, simply run:
 ```html
 docker-compose up --force-recreate --build -d
 ```
-Go to:
 
 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) for interactive api docs
 
 [http://127.0.0.1:8501](http://127.0.0.1:8501) for streamlit application
 
-Automated testing of backend using pytest, run locally by 
+Automated testing of backend using pytest, run on docker instance
 ```html
-cd aurora/backend
 pytest -p no:cacheprovider 
 ```
+
 ## Major Dependencies:
-- Fastapi
-- Streamlit
-- Docker
+**Fastapi:** https://github.com/tiangolo/fastapi
+
+**Streamlit:** https://github.com/streamlit/streamlit
+
+**Docker:** https://www.docker.com
+
 ## Continous integration
-Github Actions: https://github.com/yeungadrian/aurora/actions
+**Github Actions:** https://github.com/yeungadrian/aurora/actions
 - Lint: Black https://github.com/psf/black#github-actions
 - Integration tests using pytest: https://fastapi.tiangolo.com/tutorial/testing/
 
@@ -48,8 +49,6 @@ Github Actions: https://github.com/yeungadrian/aurora/actions
 2. Use financial models on real life data with interactive application
 
 - Fastapi backend
-    - Data is stored as parquet files (compressed files)
-    - Avoiding databases for now as the focus is on building models
     - Standard fastapi code structure based loosely on https://fastapi.tiangolo.com/project-generation/
     - Only integration tests: cover all endpoints, allows to see if refactoring has changed calculations accidently
 - Streamlit front end
@@ -59,7 +58,8 @@ Github Actions: https://github.com/yeungadrian/aurora/actions
     - Not worth investing in automated tests here yet
 - Data
     - Calling api's directly is too slow, especially when doing analysis of many funds, when using free tiers anyway
-    - Need to look for data sources and save as parquet files
+    - Data is stored as parquet files (compressed files)
+    - Avoiding databases for now as the focus is on building models
     - Free API's are either too slow or have limits, which will be breached just deploying the app and testing changes
     
 ## Roadmap of functionality:
