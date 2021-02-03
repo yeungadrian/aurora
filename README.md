@@ -1,5 +1,7 @@
 # Aurora
-## Understanding financial markets?
+<p>
+    <em>Understanding financial markets</em>
+</p>
 
 ## Portfolio Backtesting
 ![](image/backtest.png)
