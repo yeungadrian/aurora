@@ -10,9 +10,10 @@ def test_fund_response_code():
         "/factorRegression/",
         json={
             "startDate": "2017-12-31",
-            "endDate": "2018-03-31",
+            "endDate": "2018-12-31",
             "funds": ["AAPL"],
             "regressionFactors": ["MktRF", "SMB", "HML"],
+            "frequency": "monthly",
         },
     )
     assert response.status_code == 200
@@ -26,13 +27,14 @@ def test_fund_response_backtest_rebalancefalse():
             "endDate": "2019-12-31",
             "funds": ["AAPL"],
             "regressionFactors": ["MktRF", "SMB", "HML"],
+            "frequency": "monthly",
         },
     )
     assert response.json()[0]["fundCode"] == "AAPL"
-    assert response.json()[0]["numberObservations"] == 503
-    assert response.json()[0]["rSquared"] == 0.4783125383580532
-    assert response.json()[0]["fValue"] == 152.50379725404886
-    assert response.json()[0]["coefficient"]["Intercept"] == -0.7141998838464716
-    assert response.json()[0]["coefficient"]["MktRF"] == 1.0345725482879313
-    assert response.json()[0]["coefficient"]["SMB"] == -0.03265664268983073
-    assert response.json()[0]["coefficient"]["HML"] == -0.335076299420108
+    assert response.json()[0]["numberObservations"] == 24
+    assert response.json()[0]["rSquared"] == 0.3402966107590083
+    assert response.json()[0]["fValue"] == 3.438884972740346
+    assert response.json()[0]["coefficient"]["Intercept"] == 1.7044938638299885
+    assert response.json()[0]["coefficient"]["MktRF"] == 105.19639234216012
+    assert response.json()[0]["coefficient"]["SMB"] == 50.61806199017328
+    assert response.json()[0]["coefficient"]["HML"] == -29.880837656903715

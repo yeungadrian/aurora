@@ -36,6 +36,11 @@ def display_factorRegression():
         default=["MktRF", "SMB", "HML"],
     )
 
+    frequency = st.sidebar.selectbox(
+        label="Return frequency",
+        options=["Daily", "Monthly"],
+    )
+
     selected_fund_list = []
 
     for i in range(0, len(selected_funds)):
@@ -45,8 +50,8 @@ def display_factorRegression():
             )[0]
         )
 
-    submit = st.sidebar.button(label = 'Run')
-    
+    submit = st.sidebar.button(label="Run")
+
     if submit:
 
         regression_input = {
@@ -54,26 +59,35 @@ def display_factorRegression():
             "endDate": end_date,
             "funds": selected_fund_list,
             "regressionFactors": selected_factors,
+            "frequency": frequency,
         }
 
         regression_response = factorRegression(regression_input)
 
- 
         for i in regression_response:
 
-            company = fund_list[fund_list["Code"] == i["fundCode"]]["Company"].reset_index(drop=True)[0]
-            regression_residuals = pd.DataFrame(
-                i["residuals"], index = [0]
-            ).transpose().reset_index()
+            company = fund_list[fund_list["Code"] == i["fundCode"]][
+                "Company"
+            ].reset_index(drop=True)[0]
+            regression_residuals = (
+                pd.DataFrame(i["residuals"], index=[0]).transpose().reset_index()
+            )
 
-            metrics = ['coefficient','standardErrors','pValues','confidenceIntervalLower','confidenceIntervalHigher']
+            metrics = [
+                "coefficient",
+                "standardErrors",
+                "pValues",
+                "confidenceIntervalLower",
+                "confidenceIntervalHigher",
+            ]
 
-            metrics_json = {j:i[j] for j in metrics if j in i}
-    
+            metrics_json = {j: i[j] for j in metrics if j in i}
+
             st.markdown(
-                f'''
+                f"""
                 ## {company}
-                ''')
+                """
+            )
 
             st.table(
                 pd.DataFrame(
@@ -87,13 +101,19 @@ def display_factorRegression():
             )
 
             dynamic_metrics = pd.DataFrame(metrics_json)
-            dynamic_metrics.columns = ['cofficient', 'standard error', 'p-value','95% lower','95% higher']
+            dynamic_metrics.columns = [
+                "cofficient",
+                "standard error",
+                "p-value",
+                "95% lower",
+                "95% higher",
+            ]
 
             st.table(dynamic_metrics)
 
-            regression_residuals.columns = ['date','residual']
-            regression_residuals['date'] = pd.to_datetime(regression_residuals['date'] )
-            
+            regression_residuals.columns = ["date", "residual"]
+            regression_residuals["date"] = pd.to_datetime(regression_residuals["date"])
+
             residual_chart = (
                 alt.Chart(regression_residuals)
                 .mark_circle()
@@ -104,6 +124,7 @@ def display_factorRegression():
             st.write(residual_chart)
 
             st.markdown(
-                f'''
+                f"""
                 ---
-                ''')
+                """
+            )

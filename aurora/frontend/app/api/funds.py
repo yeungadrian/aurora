@@ -1,6 +1,7 @@
 import requests
 import streamlit as st
 
+
 @st.cache()
 def get_funds():
     url = "http://api:8000/funds/"
@@ -8,12 +9,14 @@ def get_funds():
 
     return response
 
+
 @st.cache()
 def backtest(json_input):
     url_backtest = "http://api:8000/backtest/"
     response = requests.post(url=url_backtest, json=json_input).json()
 
     return response
+
 
 @st.cache()
 def factorRegression(json_input):

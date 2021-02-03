@@ -74,7 +74,7 @@ def load_normalised_historical_index(fund_codes, start_date, end_date):
     return json.loads(subset_data.to_json(orient="records"))
 
 
-def load_historical_returns(fund_codes, start_date, end_date):
+def load_historical_returns(fund_codes, start_date, end_date, frequency):
 
     response_columns = ["date"] + fund_codes
 
@@ -87,6 +87,13 @@ def load_historical_returns(fund_codes, start_date, end_date):
         )
     )
 
+    if frequency == "monthly":
+        subset_data["date"] = pd.to_datetime(subset_data["date"])
+        subset_data = subset_data[subset_data["date"].dt.is_month_end].reset_index(
+            drop=True
+        )
+        subset_data["date"] = subset_data["date"].dt.strftime("%Y-%m-%d")
+
     for i in fund_codes:
         subset_data[f"{i}index"] = (subset_data[i] / subset_data[i].shift()) - 1
 
@@ -97,12 +104,17 @@ def load_historical_returns(fund_codes, start_date, end_date):
     return json.loads(subset_data.to_json(orient="records"))
 
 
-def load_ffFactors(regression_factors, start_date, end_date):
+def load_ffFactors(regression_factors, start_date, end_date, frequency="daily"):
 
     response_columns = ["date"] + regression_factors + ["RF"]
 
+    data_location = "app/data/ffFactors.parquet"
+
+    if frequency == "monthly":
+        data_location = "app/data/ffFactorsMonthly.parquet"
+
     all_historical_factors = pq.read_table(
-        "app/data/ffFactors.parquet", columns=response_columns
+        data_location, columns=response_columns
     ).to_pandas()
     subset_data = tidy_timeseries_data(
         all_historical_data=all_historical_factors,
@@ -110,6 +122,12 @@ def load_ffFactors(regression_factors, start_date, end_date):
         end_date=end_date,
         interpolation=None,
     )
+
+    # Kenneth French's data is off by factor of 100
+    for k in response_columns:
+        if k != "date":
+            subset_data[k] = subset_data[k] / 100
+
     subset_data.columns = response_columns
 
     return json.loads(subset_data.to_json(orient="records"))

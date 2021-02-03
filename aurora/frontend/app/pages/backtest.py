@@ -76,8 +76,6 @@ def display_backtest():
             backtest_monthly_returns["date"]
         )
 
-    
-
         chartoutput = (
             alt.Chart(backtest_portfolio)
             .mark_line()
