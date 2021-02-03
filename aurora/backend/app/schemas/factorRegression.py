@@ -6,6 +6,7 @@ class factorRegression(BaseModel):
     endDate: str
     funds: list
     regressionFactors: list
+    frequency: str
 
     class Config:
         schema_extra = {
@@ -14,5 +15,6 @@ class factorRegression(BaseModel):
                 "endDate": "2019-12-31",
                 "funds": ["AAPL"],
                 "regressionFactors": ["MktRF", "SMB", "HML"],
+                "frequency": "monthly",
             }
         }

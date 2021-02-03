@@ -76,16 +76,14 @@ def display_backtest():
             backtest_monthly_returns["date"]
         )
 
-        with st.beta_expander(label="Portfolio historical projection"):
+        chartoutput = (
+            alt.Chart(backtest_portfolio)
+            .mark_line()
+            .encode(x="date", y="portfolio")
+            .properties(width=700)
+        )
 
-            chartoutput = (
-                alt.Chart(backtest_portfolio)
-                .mark_line()
-                .encode(x="date", y="portfolio")
-                .properties(width=700)
-            )
-
-            st.write(chartoutput)
+        st.write(chartoutput)
 
         with st.beta_expander(label="Metrics"):
             cagr = round(backtest_response["metrics"]["cagr"], 2) * 100

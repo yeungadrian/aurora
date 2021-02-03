@@ -1,18 +1,10 @@
-# Fastapi
 fastapi
 uvicorn
-
+pyarrow
 pandas
 requests
+Statsmodels
 
-# Styler
 black
 
-# Data
-pyarrow
-
-# Testing
 pytest
-
-# Regression
-Statsmodels

@@ -15,12 +15,14 @@ def factorRegression(item: schemas.factorRegression):
     start_date = item.dict()["startDate"]
     end_date = item.dict()["endDate"]
     regression_factors = item.dict()["regressionFactors"]
+    frequency = item.dict()["frequency"].lower()
 
     frenchfama_Factors = pd.DataFrame(
         load_ffFactors(
             regression_factors=regression_factors,
             start_date=start_date,
             end_date=end_date,
+            frequency=frequency,
         )
     )
 
@@ -29,6 +31,7 @@ def factorRegression(item: schemas.factorRegression):
             fund_codes=fund_codes,
             start_date=start_date,
             end_date=end_date,
+            frequency=frequency,
         )
     )
 
