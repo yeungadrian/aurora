@@ -3,13 +3,13 @@
     <em>Understanding financial markets</em>
 </p>
 
-## Portfolio Backtesting
+### Portfolio Backtesting
 ![](image/backtest.png)
 
-## Factor Analysis
+### Factor Analysis
 ![](image/regression.png)
 
-## Supported features:
+### Supported features:
 - Backtesting portfolios
     - Rebalancing strategies
     - Annual growth rate
@@ -18,7 +18,7 @@
 - Factor Analysis:
     - French Fama factor model
 
-## Installation:
+### Installation:
 Quick and easy local deployments using docker-compose, simply run:
 ```html
 docker-compose up --force-recreate --build -d
@@ -33,19 +33,19 @@ Automated testing of backend using pytest, run on docker instance
 pytest -p no:cacheprovider 
 ```
 
-## Major Dependencies:
+### Major Dependencies:
 **Fastapi:** https://github.com/tiangolo/fastapi
 
 **Streamlit:** https://github.com/streamlit/streamlit
 
 **Docker:** https://www.docker.com
 
-## Continous integration
+### Continous integration
 **Github Actions:** https://github.com/yeungadrian/aurora/actions
 - Lint: Black https://github.com/psf/black#github-actions
 - Integration tests using pytest: https://fastapi.tiangolo.com/tutorial/testing/
 
-## Architecture:
+### Architecture:
 - Goals:
 1. Build out financial models to improve knowledge
 2. Use financial models on real life data with interactive application
@@ -64,7 +64,7 @@ pytest -p no:cacheprovider
     - Avoiding databases for now as the focus is on building models
     - Free API's are either too slow or have limits, which will be breached just deploying the app and testing changes
     
-## Roadmap of functionality:
+### Roadmap of functionality:
     - [x] Add images of app to readme
     - [x] Factor Regression: French Fama
     - [ ] Intuitive feedback on output of factor regression
