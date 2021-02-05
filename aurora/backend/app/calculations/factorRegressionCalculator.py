@@ -41,10 +41,10 @@ def calculatefactorRegression(
 def get_summary_results(results, fund_code):
     """take the result of an statsmodel results table and transforms it into a dataframe
     https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.RegressionResults.html"""
-    pvals = results.pvalues * 100
-    coefficient = results.params * 100
-    conf_lower = results.conf_int()[0] * 100
-    conf_higher = results.conf_int()[1] * 100
+    pvals = results.pvalues
+    coefficient = results.params
+    conf_lower = results.conf_int()[0]
+    conf_higher = results.conf_int()[1]
     standard_errors = results.bse
     residuals = results.resid
     num_obs = results.nobs

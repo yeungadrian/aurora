@@ -6,8 +6,9 @@
 ### Portfolio Backtesting
 ![](image/backtest.png)
 
-### Factor Analysis
-![](image/regression.png)
+## Factor Analysis
+![](image/factor.png)
+
 
 ### Supported features:
 - Backtesting portfolios
@@ -67,6 +68,6 @@ pytest -p no:cacheprovider
 ### Roadmap of functionality:
     - [x] Add images of app to readme
     - [x] Factor Regression: French Fama
-    - [ ] Intuitive feedback on output of factor regression
-    - [ ] Tidy up routes of backend
+    - [x] Tidy up routes of backend
+    - [x] Intuitive feedback on output of factor regression
     - [ ] Deployment to a cloud provider

@@ -75,7 +75,6 @@ def load_normalised_historical_index(fund_codes, start_date, end_date):
 
 
 def load_historical_returns(fund_codes, start_date, end_date, frequency):
-
     response_columns = ["date"] + fund_codes
 
     start_date = datetime.strptime(start_date, "%Y-%m-%d") - timedelta(days=1)
@@ -105,9 +104,7 @@ def load_historical_returns(fund_codes, start_date, end_date, frequency):
 
 
 def load_ffFactors(regression_factors, start_date, end_date, frequency="daily"):
-
     response_columns = ["date"] + regression_factors + ["RF"]
-
     data_location = "app/data/ffFactors.parquet"
 
     if frequency == "monthly":

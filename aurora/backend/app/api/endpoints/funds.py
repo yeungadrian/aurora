@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/")
-def funds():
+def get_funds():
     result = load_available_funds()
 
     return result
