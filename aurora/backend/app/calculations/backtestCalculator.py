@@ -14,7 +14,7 @@ def backtest_funds(
 ):
     number_funds = len(fund_codes)
 
-    fund_diagonal = np.zeros((num_funds, number_funds))
+    fund_diagonal = np.zeros((number_funds, number_funds))
     np.fill_diagonal(fund_diagonal, fund_amount)
 
     result = fund_index[fund_codes].dot(fund_diagonal)
