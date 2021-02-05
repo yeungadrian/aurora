@@ -99,6 +99,21 @@ def display_factorRegression():
                     index=[0],
                 )
             )
+            
+            alpha = round(i["coefficient"]["Intercept"]/0.0001,2)
+
+            if frequency == 'Monthly':
+                annual_alpha = alpha * 12
+            else:
+                annual_alpha = round(alpha/100 * 255,2)
+
+            st.markdown(
+                f"""
+            Alpha: {alpha}bps
+
+            Annualised Alpha:  {annual_alpha}%
+            """
+            )
 
             dynamic_metrics = pd.DataFrame(metrics_json)
             dynamic_metrics.columns = [

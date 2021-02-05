@@ -34,7 +34,7 @@ def test_apple_regression_12month():
     assert response.json()[0]["numberObservations"] == 24
     assert response.json()[0]["rSquared"] == 0.3402966107590083
     assert response.json()[0]["fValue"] == 3.438884972740346
-    assert response.json()[0]["coefficient"]["Intercept"] == 1.7044938638299891
-    assert response.json()[0]["coefficient"]["MktRF"] == 105.19639234216007
-    assert response.json()[0]["coefficient"]["SMB"] == 50.618061990173246
-    assert response.json()[0]["coefficient"]["HML"] == -29.880837656903687
+    assert response.json()[0]["coefficient"]["Intercept"] == 0.01704493863829989
+    assert response.json()[0]["coefficient"]["MktRF"] == 1.0519639234216007
+    assert response.json()[0]["coefficient"]["SMB"] == 0.5061806199017325
+    assert response.json()[0]["coefficient"]["HML"] == -0.29880837656903686

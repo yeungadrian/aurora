@@ -101,6 +101,8 @@ def load_historical_returns(fund_codes, start_date, end_date, frequency):
     subset_data = subset_data.drop(fund_codes, axis=1)
     subset_data.columns = response_columns
 
+ 
+
     return json.loads(subset_data.to_json(orient="records"))
 
 

@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.post("/")
-def factorRegression(item: schemas.factorRegression):
+def factor_regression(item: schemas.factorRegression):
 
     fund_codes = item.dict()["funds"]
     start_date = item.dict()["startDate"]

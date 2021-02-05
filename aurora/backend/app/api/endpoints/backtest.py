@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.post("/")
-def backtest(item: schemas.backtest):
+def backtest_portfolio(item: schemas.backtest):
     portfolio = item.dict()["portfolio"]
     fund_codes = []
     for i in portfolio:
