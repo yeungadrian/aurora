@@ -14,7 +14,7 @@ def calculate_metrics(portfolio):
     end_date = portfolio["date"].iat[-1]
 
     # Number of years calculation could be improved, do difference in months and pretend always at end of month
-    num_years = (end_date - start_date).days / 365.25
+    number_years = (end_date - start_date).days / 365.25
 
     # Needs to be dynamically loaded eventually
     risk_free = 0.01
@@ -35,7 +35,7 @@ def calculate_metrics(portfolio):
     monthly_returns = json.loads(monthly_returns.to_json(orient="records"))
 
     cagr = calculate_cagr(
-        end_value=end_value, start_value=start_value, num_years=num_years
+        end_value=end_value, start_value=start_value, number_years=number_years
     )
     negative_returns = month_end_projection[month_end_projection["monthlyReturn"] < 0]
     monthly_std = calculate_std(returns=month_end_projection["monthlyReturn"])
@@ -62,9 +62,9 @@ def calculate_metrics(portfolio):
     return result
 
 
-def calculate_cagr(end_value, start_value, num_years):
+def calculate_cagr(end_value, start_value, number_years):
 
-    return np.power(end_value / start_value, 1 / num_years) - 1
+    return np.power(end_value / start_value, 1 / number_years) - 1
 
 
 def calculate_std(returns):

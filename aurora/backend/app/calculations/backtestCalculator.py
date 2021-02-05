@@ -12,12 +12,12 @@ def backtest_funds(
     fund_codes,
     fund_index,
 ):
-    num_funds = len(fund_codes)
+    number_funds = len(fund_codes)
 
-    fund_diag = np.zeros((num_funds, num_funds))
-    np.fill_diagonal(fund_diag, fund_amount)
+    fund_diagonal = np.zeros((num_funds, number_funds))
+    np.fill_diagonal(fund_diagonal, fund_amount)
 
-    result = fund_index[fund_codes].dot(fund_diag)
+    result = fund_index[fund_codes].dot(fund_diagonal)
     result.columns = fund_codes
 
     result["portfolio"] = result.sum(axis=1)
@@ -29,6 +29,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
     fund_index = pd.DataFrame(historical_index)
     fund_codes = []
     fund_amount = []
+
     for i in portfolio:
         fund_codes.append(i["fund"])
         fund_amount.append(i["amount"])
@@ -40,7 +41,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
 
         frequency = {"y": 12, "q": 3, "m": 1}
 
-        rebalanceFrequency = frequency[strategy["rebalanceFrequency"].lower()]
+        rebalance_frequency = frequency[strategy["rebalanceFrequency"].lower()]
 
         fund_index["date"] = pd.to_datetime(fund_index["date"])
 
@@ -48,7 +49,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
             "date"
         ].reset_index(drop=True)
         rebalancing_dates = month_end_dates[
-            month_end_dates.index % rebalanceFrequency == 0
+            month_end_dates.index % rebalance_frequency == 0
         ].reset_index(drop=True)
 
         temp_amount = fund_amount
@@ -66,22 +67,18 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
 
             subset_index = fund_index[fund_index["date"] >= start_period]
             subset_index = subset_index[subset_index["date"] <= end_period]
+
             for k in fund_codes:
                 subset_index[k] = (
                     subset_index[k] / subset_index[k][subset_index.index[0]]
                 )
 
             temp_df = backtest_funds(temp_amount, fund_codes, subset_index)
-
             # Getting the portfolio at the enddate
             temp_total = temp_df.iloc[(temp_df.shape[0] - 1)][fund_codes].sum()
-
             temp_amount = [temp_total * i for i in fund_percentage]
-
             temp_df["date"] = subset_index["date"]
-
             temp_df.drop(temp_df.tail(1).index, inplace=True)
-
             subset_list.append(temp_df)
 
         result_df = pd.concat(subset_list)
@@ -90,6 +87,7 @@ def backtest_strategy(historical_index, portfolio, strategy, start_date, end_dat
     else:
         result_df = backtest_funds(fund_amount, fund_codes, fund_index)
         result_df["date"] = dates
+
     result_df = result_df.drop(columns=fund_codes)
 
     result_df["drawdown"] = (
