@@ -46,25 +46,7 @@ pytest -p no:cacheprovider
 - Lint: Black https://github.com/psf/black#github-actions
 - Integration tests using pytest: https://fastapi.tiangolo.com/tutorial/testing/
 
-### Architecture:
-- Goals:
-1. Build out financial models to improve knowledge
-2. Use financial models on real life data with interactive application
 
-- Fastapi backend
-    - Standard fastapi code structure based loosely on https://fastapi.tiangolo.com/project-generation/
-    - Only integration tests: cover all endpoints, allows to see if refactoring has changed calculations accidently
-- Streamlit front end
-    - Financial analysis requires visualisation, very difficult to get intuitive sense without visualisations and so command line gui's are ruled out
-    - Do not want to learn javascript at the moment and so restricted to python libraries such as streamlit, dash
-    - Streamlit looks to be the best to prototype something as fast as possible
-    - Not worth investing in automated tests here yet
-- Data
-    - Calling api's directly is too slow, especially when doing analysis of many funds, when using free tiers anyway
-    - Data is stored as parquet files (compressed files)
-    - Avoiding databases for now as the focus is on building models
-    - Free API's are either too slow or have limits, which will be breached just deploying the app and testing changes
-    
 ### Roadmap of functionality:
     - [x] Add images of app to readme
     - [x] Factor Regression: French Fama
