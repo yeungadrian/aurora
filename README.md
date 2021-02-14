@@ -68,6 +68,5 @@ pytest -p no:cacheprovider
 ### Roadmap of functionality:
     - [x] Add images of app to readme
     - [x] Factor Regression: French Fama
-    - [x] Tidy up routes of backend
-    - [x] Intuitive feedback on output of factor regression
+    - [ ] Efficient Frontier, mean variance
     - [ ] Deployment to a cloud provider
