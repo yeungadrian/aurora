@@ -9,6 +9,9 @@
 ## Factor Analysis
 ![](image/factor.png)
 
+## Portfolio optimisation
+![](image/optimisation.png)
+
 
 ### Supported features:
 - Backtesting portfolios
@@ -18,6 +21,7 @@
     - Max drawdown
 - Factor Analysis:
     - French Fama factor model
+- Mean variance portfolio optimisation
 
 ### Installation:
 Quick and easy local deployments using docker-compose, simply run:

@@ -24,3 +24,11 @@ def factorRegression(json_input):
     response = requests.post(url=url_factorRegression, json=json_input).json()
 
     return response
+
+
+@st.cache()
+def efficientFrontier(json_input):
+    url_efficientFrontier = "http://api:8000/portfolioOptimisation/"
+    response = requests.post(url=url_efficientFrontier, json=json_input).json()
+
+    return response

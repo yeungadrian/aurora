@@ -12,7 +12,7 @@ class frontier(BaseModel):
             "example": {
                 "startDate": "2015-12-31",
                 "endDate": "2019-12-31",
-                "funds": ["AAPL","AMZN","AMD"],
+                "funds": ["AAPL", "AMZN", "AMD"],
                 "numberOfPortfolios": 4,
             }
         }

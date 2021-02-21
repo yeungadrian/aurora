@@ -11,8 +11,8 @@ def test_frontier_response_code():
         json={
             "startDate": "2017-12-31",
             "endDate": "2018-12-31",
-            "funds": ["AAPL","AMZN"],
-            "numberOfPortfolios": 3, 
+            "funds": ["AAPL", "AMZN"],
+            "numberOfPortfolios": 3,
         },
     )
     assert response.status_code == 200
@@ -24,8 +24,8 @@ def test_frontier_three_funds():
         json={
             "startDate": "2015-12-31",
             "endDate": "2018-12-31",
-            "funds": ["AAPL","AMZN","AMD"],
-            "numberOfPortfolios": 3, 
+            "funds": ["AAPL", "AMZN", "AMD"],
+            "numberOfPortfolios": 3,
         },
     )
     assert response.json()[0]["returns"] == 0.015968

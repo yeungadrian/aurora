@@ -16,7 +16,7 @@ def efficient_frontier(item: schemas.frontier):
     start_date = item.dict()["startDate"]
     end_date = item.dict()["endDate"]
     numberOfPortfolios = item.dict()["numberOfPortfolios"]
-    frequency = 'monthly'
+    frequency = "monthly"
 
     historical_returns = pd.DataFrame(
         load_historical_returns(
@@ -27,9 +27,11 @@ def efficient_frontier(item: schemas.frontier):
         )
     )
 
-    fund_returns = np.mean(historical_returns.drop(columns=['date']))
-    fund_covariance = historical_returns.drop(columns=['date']).cov()
+    fund_returns = np.mean(historical_returns.drop(columns=["date"]))
+    fund_covariance = historical_returns.drop(columns=["date"]).cov()
 
-    result = efficient_frontier_metrics(fund_returns,fund_covariance,numberOfPortfolios,fund_codes)
- 
+    result = efficient_frontier_metrics(
+        fund_returns, fund_covariance, numberOfPortfolios, fund_codes
+    )
+
     return result
