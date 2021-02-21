@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app import schemas
 from app.data.dataLoader import load_historical_returns, load_ffFactors
-from app.calculations.factorRegressionCalculator import calculatefactorRegression
+from app.calculations.factorRegressionCalculator import calculate_factor_regression
 import pandas as pd
 
 router = APIRouter()
@@ -39,7 +39,7 @@ def factor_regression(item: schemas.factorRegression):
 
     for i in fund_codes:
 
-        result = calculatefactorRegression(
+        result = calculate_factor_regression(
             fund_code=i,
             regression_factors=regression_factors,
             historical_returns=historical_returns,

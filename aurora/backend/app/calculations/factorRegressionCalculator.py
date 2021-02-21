@@ -4,7 +4,7 @@ import json
 import numpy as np
 
 
-def calculatefactorRegression(
+def calculate_factor_regression(
     fund_code,
     regression_factors,
     historical_returns,
