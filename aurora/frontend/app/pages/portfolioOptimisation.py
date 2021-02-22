@@ -11,7 +11,7 @@ def display_portfolioOptimsiation():
     st.title("Portfolio Optimisation")
     fund_list = pd.DataFrame(get_funds())
 
-    st.sidebar.subheader("Regression inputs")
+    st.sidebar.subheader("Optimisation inputs")
 
     start_date = st.sidebar.date_input(
         "Start Date", value=datetime(2017, 12, 31)
